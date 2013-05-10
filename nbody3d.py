@@ -14,8 +14,7 @@ class Symplectic(object):
 		self.iterations = simulationTime / timeStep
 
     def __str__(self):
-        return 'np: ' + str(self.np) + ', g: ' + str(self.g) + ', ts: ' + str(self.timeStep) + ', n: ' + str(self.iterations)
-        
+        return 'np: ' + str(self.np) + ', g: ' + str(self.g) + ', ts: ' + str(self.timeStep) + ', n: ' + str(self.iterations) + ', n: ' + str(self.particles)      
 
 class Particle(object):
 	
@@ -26,8 +25,11 @@ class Particle(object):
 		self.pX = pX
 		self.pY = pY
 		self.pZ = pZ
-		self.mass = mass                            
-    
+		self.mass = mass                
+
+#	def __str__(self):
+# 		return 'qX: ' + str(self.qX) + ', qY: ' + str(self.qY) + ', qZ: ' + str(self.qZ) + ', pX: ' + str(self.pX) + ', pY: ' + str(self.pY) + ' pZ: ' + str(self.pZ)   
+
 def distance (xA, yA, zA, xB, yB, zB):
 	return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
 
@@ -94,7 +96,7 @@ def stormerVerlet4 (s, first, second):
 def threeBody ():
 	g = 1.0
 	ts = 0.01
-	simulationTime = 1.0e3
+	simulationTime = 1.0e4
 	bodies = []
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
@@ -102,10 +104,10 @@ def threeBody ():
 	return Symplectic(g, simulationTime, ts, bodies)
 
 if __name__ == "__main__":
-		debug = True
+		debug = False
 		n = 0
 		s = threeBody()
-		print(s)
+#		print(s)
 		h0 = hamiltonian(s)
 		hMin = h0
 		hMax = h0
