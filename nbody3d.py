@@ -3,6 +3,7 @@
 """
 """
 import math
+#import json
 
 class Symplectic(object):
 	
@@ -104,7 +105,7 @@ def threeBody ():
 	return Symplectic(g, simulationTime, ts, bodies)
 
 if __name__ == "__main__":
-		debug = False
+		debug = True
 		n = 0
 		s = threeBody()
 #		print(s)
@@ -121,6 +122,12 @@ if __name__ == "__main__":
 				elif (hNow > hMax):
 					hMax = hNow
 				if ((n % 1000) == 0):
+#					print(json.dumps(s.particles))
+					l = ["["]
+					for i in range(s.np):
+						p = s.particles[i]
+						l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
+					print(''.join(l) + "]")
 					print("t: " + str(n * s.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str((10.0 * math.log10(math.fabs(dH / h0)))))
 			n += 1	
 else:
