@@ -80,19 +80,13 @@ def stormerVerlet2 (s, first, second):
 	first(s, 0.5)
 
 def stormerVerlet4 (s, first, second):
-	cubeRoot2 = math.pow(2.0, 1.0 / 3.0)
-	denom = 2.0 - cubeRoot2
-	c1 = c4 = 1.0 / (2.0 * denom)
-	c2 = c3 = (1.0 - cubeRoot2) / (2.0 * denom)
-	d1 = d3 = 1.0 / denom
-	d2 = - cubeRoot2 / denom
-	first(s, c1)
-	second(s, d1)
-	first(s, c2)
-	second(s, d2)
-	first(s, c3)
-	second(s, d3)
-	first(s, c4)
+	first(s, 0.6756035959798289)
+	second(s, 1.3512071919596578)
+	first(s, -0.17560359597982883)
+	second(s, -1.7024143839193153)
+	first(s, -0.17560359597982883)
+	second(s, 1.3512071919596578)
+	first(s, 0.6756035959798289)
 
 def threeBody ():
 	g = 1.0
