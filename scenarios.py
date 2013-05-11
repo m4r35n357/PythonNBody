@@ -39,7 +39,7 @@ def fourBody ():
 '''
 if __name__ == "__main__":
 		n = 0
-		s = fourBody()
+		s = threeBody()
 		h0 = hamiltonian(s)
 		hMin = h0
 		hMax = h0

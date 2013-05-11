@@ -30,7 +30,7 @@ class Particle(object):
 def distance (xA, yA, zA, xB, yB, zB):
 	return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
 
-def hamiltonian (s):
+def hamiltonian (s):  # Energy
 	energy = 0.0
 	for i in range(s.np):
 		a = s.particles[i]
@@ -41,7 +41,7 @@ def hamiltonian (s):
 				energy -= s.g * a.mass * b.mass / distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
 	return energy
 
-def updateQ (s, c):
+def updateQ (s, c):  # Update Positions
 	for i in range(s.np):
 		a = s.particles[i]
 		tmp = c / a.mass * s.timeStep
@@ -49,7 +49,7 @@ def updateQ (s, c):
 		a.qY += a.pY * tmp
 		a.qZ += a.pZ * tmp
 
-def updateP (s, c):
+def updateP (s, c):  # Update Momenta
 	for i in range(s.np):
 		a = s.particles[i]
 		for j in range(s.np):
@@ -66,16 +66,16 @@ def updateP (s, c):
 				b.pY += dPy
 				b.pZ += dPz
 
-def euler (s, first, second):
+def euler (s, first, second):  # First order
 	first(s, 1.0)
 	second(s, 1.0)
 
-def stormerVerlet2 (s, first, second):
+def stormerVerlet2 (s, first, second):  # Second order
 	first(s, 0.5)
 	second(s, 1.0)
 	first(s, 0.5)
 
-def stormerVerlet4 (s, first, second):
+def stormerVerlet4 (s, first, second):  # Fourth order
 	first(s, 0.6756035959798289)
 	second(s, 1.3512071919596578)
 	first(s, -0.17560359597982883)
@@ -85,37 +85,6 @@ def stormerVerlet4 (s, first, second):
 	first(s, 0.6756035959798289)
 
 if __name__ == "__main__":
-	def threeBody ():
-		g = 1.0
-		ts = 0.01
-		outputInterval = 1000
-		simulationTime = 1.0e4
-		bodies = []
-		bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
-		bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
-		bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-		return Symplectic(g, simulationTime, ts, outputInterval, bodies)
-
-		n = 0
-		s = threeBody()
-		h0 = hamiltonian(s)
-		hMin = h0
-		hMax = h0
-		while (n <= s.iterations):
-			stormerVerlet4(s, updateQ, updateP)
-			hNow = hamiltonian(s)
-			dH = hNow - h0
-			if (hNow < hMin):
-				hMin = hNow
-			elif (hNow > hMax):
-				hMax = hNow
-			if ((n % s.outputInterval) == 0):
-				l = ["["]
-				for i in range(s.np):
-					p = s.particles[i]
-					l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
-				print(''.join(l) + "]")
-				print("t: " + str(n * s.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str((10.0 * math.log10(math.fabs(dH / h0)))))
-			n += 1
+	pass
 else:
     print __name__ + " module loaded"
