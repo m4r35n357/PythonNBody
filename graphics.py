@@ -102,7 +102,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 		p = scenario.particles[i]
 		ball = sphere(pos = (p.qX, p.qY, p.qZ), radius = 0.1 * math.pow(p.mass, 1.0 / 3.0), color = colours[i])
 		ball.trail = curve(color = ball.color)
-		ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
+#		ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
 		scenario.spheres.append(ball)
 	h0 = scenario.hamiltonian()
 	hMin = h0
@@ -125,7 +125,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 				position = (p.qX - scenario.cogX, p.qY - scenario.cogY, p.qZ - scenario.cogZ)
 				ball.pos = position
 				ball.trail.append(pos = position)
-				ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
+#				ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
 #				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 #			print(''.join(l) + "]")
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
