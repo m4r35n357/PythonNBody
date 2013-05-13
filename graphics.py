@@ -53,7 +53,7 @@ def threeBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def fourBody ():
-	g = 3.5
+	g = 4.0
 	ts = 0.01
 	outputInterval = 1
 	errorLimit = -60.0;
