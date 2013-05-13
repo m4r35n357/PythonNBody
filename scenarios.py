@@ -58,15 +58,15 @@ def eightBody ():
 '''
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = eightBody()
+	scenario = threeBody()
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
 		scenario.stormerVerlet4(scenario.updateQ, scenario.updateP)
 		hNow = scenario.hamiltonian()
-		tmp = math.fabs(hNow - h0)
-		dH = tmp if tmp > 0.0 else 1.0e-18
+		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
+		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
 		if (hNow < hMin):
 			hMin = hNow
 		elif (hNow > hMax):
