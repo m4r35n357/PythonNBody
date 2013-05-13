@@ -5,11 +5,12 @@ import math
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, outputInterval, bodies):
+	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies):
 		self.particles = bodies
 		self.np = len(bodies)
 		self.g = g
 		self.timeStep = timeStep
+		self.errorLimit = errorLimit
 		self.outputInterval = outputInterval
 		self.iterations = simulationTime / timeStep
 
