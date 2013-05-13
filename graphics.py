@@ -61,26 +61,6 @@ totalseconds = 0
 # r is the distance between the centers of the two masses
 G = 6.67e-11
 
-
-##########################################################################################
-#
-# CREATE EARTH AND SATELLITE OBJECTS
-#
-##########################################################################################
-
-#earth = sphere(pos=(0,0,0),radius=radiusOfEarth,color=color.blue)
-#earth.mass = massOfEarth
-
-#satellite = sphere(pos=(0,distanceEarthToSatellite,0),radius=radiusOfSatellite,color=color.white)
-#satellite.mass = massOfSatellite
-
-#mylabel = label(pos=(0,distanceEarthToSatellite + 100000000,0))
-
-# when we draw things to scale as above the moon is a little hard to see
-# lets pretend the moon has a much larger radius so we can see it
-#satellite.radius = satellite.radius * 3
-#earth.radius = earth.radius * 3 # be careful with this one as low satellites will be hidden
-
 ##########################################################################################
 #
 # SET INITIAL MOTION OF SATELLITE
@@ -107,7 +87,7 @@ speedOfSatellite = 500 # change this to how fast we think the satellite is going
 
 def threeBody ():
 	g = 1.0
-	ts = 0.001
+	ts = 0.01
 	outputInterval = 1
 	errorLimit = -60.0;
 	simulationTime = 1.0e4
@@ -131,47 +111,17 @@ def earthSun ():
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def plotMappings ():
+	pass
 	
-	'''
-while True:
-    totalseconds += dt
-    rate(10000) # a high number pretty much means go as fast as our computer can
-    
-    # the magnitude of a vector subtracted from another is 
-    # the distance between the two vectors
-    distEarthToSatellite = mag(earth.pos - satellite.pos)
-
-    # the norm of a vector subtracted from another is a
-    # one unit vector in the direction of the other vector
-    # See diagram of vector subtraction on wikipedia:
-    # http://en.wikipedia.org/wiki/Vector_(spatial)#Vector_addition_and_subtraction
-    ForceGravityOnTheSatelliteDir = norm(earth.pos - satellite.pos)    
-
-    # calculate force magnitude from Newton's Law of Universal Gravitation
-    ForceGravityOnTheSatelliteMag = G * (earth.mass * satellite.mass) / distEarthToSatellite**2
-
-    # point that force magnitude in the direction of Earth
-    ForceGravityOnTheSatellite = ForceGravityOnTheSatelliteMag * ForceGravityOnTheSatelliteDir
-
-    # move the satellite using the force, Newton's 2nd Law, and the position equations
-    satellite.acceleration = ForceGravityOnTheSatellite / satellite.mass
-    satellite.velocity += satellite.acceleration * dt
-    satellite.pos += satellite.velocity * dt + .5 * satellite.acceleration * dt**2
-
-    # Display info to the user
-    message = "Satellite's distance from earth's surface: %3.f kilometers" % ((distEarthToSatellite-radiusOfEarth)/1000)
-    message += "\nSatellite's speed: %.0f m/s" % mag(satellite.velocity)
-    message += "\nSatellite's acceleration magnitude: %.4f m/s**2" % mag(satellite.acceleration)
-    message += "\nTime: " + make_time_string(totalseconds)
-    mylabel.text = message
-	'''
 def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 	n = 0
 	scenario = threeBody()  # create a symplectic integrator object
 	scenario.spheres = []
 	for i in scenario.indices:
 		p = scenario.particles[i]
-		scenario.spheres.append(sphere(pos=(p.qX, p.qY, p.qZ), radius=0.01, color=color.blue))		
+		ball = sphere(pos=(p.qX, p.qY, p.qZ), radius=0.01, color=color.blue)
+		ball.trail = curve(color=ball.color)
+		scenario.spheres.append(ball)
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
@@ -191,7 +141,9 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 			for i in scenario.indices:
 				p = scenario.particles[i]
 #				scenario.spheres[i].pos = (p.qX, p.qY, p.qZ)
-				scenario.spheres[i].pos = (p.qX - scenario.cogX, p.qY - scenario.cogY, p.qZ - scenario.cogZ)
+				position = (p.qX - scenario.cogX, p.qY - scenario.cogY, p.qZ - scenario.cogZ)
+				scenario.spheres[i].pos = position
+				scenario.spheres[i].trail.append(pos=position)
 #				print(scenario.spheres[i].pos)
 				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 #			print(''.join(l) + "]")
