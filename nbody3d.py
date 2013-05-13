@@ -16,6 +16,7 @@ class Symplectic(object):
 	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies):
 		self.particles = bodies
 		self.np = len(bodies)
+		self.indices = range(self.np)
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
@@ -27,7 +28,7 @@ class Symplectic(object):
 
 	def hamiltonian (self):  # Energy
 		energy = 0.0
-		for i in range(self.np):
+		for i in self.indices:
 			a = self.particles[i]
 			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
 			for j in range(self.np):
@@ -37,7 +38,7 @@ class Symplectic(object):
 		return energy
 
 	def updateQ (self, c):  # Update Positions
-		for i in range(self.np):
+		for i in self.indices:
 			a = self.particles[i]
 			tmp = c / a.mass * self.timeStep
 			a.qX += a.pX * tmp
@@ -45,9 +46,9 @@ class Symplectic(object):
 			a.qZ += a.pZ * tmp
 
 	def updateP (self, c):  # Update Momenta
-		for i in range(self.np):
+		for i in self.indices:
 			a = self.particles[i]
-			for j in range(self.np):
+			for j in self.indices:
 				b = self.particles[j]
 				if (i > j):
 					tmp = - c * self.g * a.mass * b.mass / math.pow(self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.timeStep
@@ -66,7 +67,7 @@ class Symplectic(object):
 		Y = 0.0;
 		Z = 0.0;
 		mT = 0.0;
-		for i in range(self.np):
+		for i in self.indices:
 			a = self.particles[i]
 			X += a.qX * a.mass
 			Y += a.qY * a.mass
@@ -79,11 +80,13 @@ class Symplectic(object):
 	def euler (self, first, second):  # First order
 		first(1.0)
 		second(1.0)
+		self.cog()
 
 	def stormerVerlet2 (self, first, second):  # Second order
 		first(0.5)
 		second(1.0)
 		first(0.5)
+		self.cog()
 
 	def stormerVerlet4 (self, first, second):  # Fourth order
 		first(0.6756035959798289)
@@ -93,6 +96,7 @@ class Symplectic(object):
 		first(-0.17560359597982883)
 		second(1.3512071919596578)
 		first(0.6756035959798289)
+		self.cog()
 
 if __name__ == "__main__":
 	pass

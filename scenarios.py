@@ -64,7 +64,6 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	hMax = h0
 	while (n <= scenario.iterations):
 		scenario.stormerVerlet4(scenario.updateQ, scenario.updateP)
-		scenario.cog()
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
@@ -74,7 +73,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
 			l = ["["]
-			for i in range(scenario.np):
+			for i in scenario.indices:
 				p = scenario.particles[i]
 				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 			print(''.join(l) + "]")
