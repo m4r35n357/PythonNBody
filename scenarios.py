@@ -64,6 +64,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	hMax = h0
 	while (n <= scenario.iterations):
 		scenario.stormerVerlet4(scenario.updateQ, scenario.updateP)
+		scenario.cog()
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
