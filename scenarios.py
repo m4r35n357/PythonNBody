@@ -38,26 +38,27 @@ def fourBody ():
 '''
 '''
 if __name__ == "__main__":
-		n = 0
-		s = threeBody()
-		h0 = hamiltonian(s)
-		hMin = h0
-		hMax = h0
-		while (n <= s.iterations):
-			stormerVerlet4(s, updateQ, updateP)
-			hNow = hamiltonian(s)
-			dH = hNow - h0 if (hNow - h0) > 0.0 else 1.0e-18
-			if (hNow < hMin):
-				hMin = hNow
-			elif (hNow > hMax):
-				hMax = hNow
-			if ((n % s.outputInterval) == 0):
-				l = ["["]
-				for i in range(s.np):
-					p = s.particles[i]
-					l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
-				print(''.join(l) + "]")
-				print("t: " + str(n * s.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(10.0 * math.log10(math.fabs(dH / h0))))
-			n += 1
+	n = 0
+	s = threeBody()
+	h0 = hamiltonian(s)
+	hMin = h0
+	hMax = h0
+	while (n <= s.iterations):
+		stormerVerlet4(s, updateQ, updateP)
+		hNow = hamiltonian(s)
+		tmp = math.fabs(hNow - h0)
+		dH = tmp if tmp > 0.0 else 1.0e-18
+		if (hNow < hMin):
+			hMin = hNow
+		elif (hNow > hMax):
+			hMax = hNow
+		if ((n % s.outputInterval) == 0):
+			l = ["["]
+			for i in range(s.np):
+				p = s.particles[i]
+				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
+			print(''.join(l) + "]")
+			print("t: " + str(n * s.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(10.0 * math.log10(math.fabs(dH / h0))))
+		n += 1
 else:
-    print __name__ + " module loaded"
+	print __name__ + " module loaded"

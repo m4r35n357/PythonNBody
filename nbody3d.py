@@ -1,11 +1,11 @@
 #!/opt/pypy-2.0-src/pypy/goal/pypy-c
-#!/usr/bin/env python
+##!/usr/bin/env python
 
 import math
 
 class Symplectic(object):
 
-    def __init__(self, g, simulationTime, timeStep, outputInterval, bodies):
+	def __init__(self, g, simulationTime, timeStep, outputInterval, bodies):
 		self.particles = bodies
 		self.np = len(bodies)
 		self.g = g
@@ -13,12 +13,12 @@ class Symplectic(object):
 		self.outputInterval = outputInterval
 		self.iterations = simulationTime / timeStep
 
-    def __str__(self):
-        return 'np: ' + str(self.np) + ', g: ' + str(self.g) + ', ts: ' + str(self.timeStep) + ', n: ' + str(self.iterations) + ', n: ' + str(self.particles)
+	def __str__(self):
+		return 'np: ' + str(self.np) + ', g: ' + str(self.g) + ', ts: ' + str(self.timeStep) + ', n: ' + str(self.iterations) + ', n: ' + str(self.particles)
 
 class Particle(object):
 
-   def __init__(self, qX, qY, qZ, pX, pY, pZ, mass):
+	def __init__(self, qX, qY, qZ, pX, pY, pZ, mass):
 		self.qX = qX
 		self.qY = qY
 		self.qZ = qZ
@@ -87,4 +87,4 @@ def stormerVerlet4 (s, first, second):  # Fourth order
 if __name__ == "__main__":
 	pass
 else:
-    print __name__ + " module loaded"
+	print __name__ + " module loaded"
