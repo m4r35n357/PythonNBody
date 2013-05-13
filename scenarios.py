@@ -1,6 +1,5 @@
 #!/opt/pypy-2.0-src/pypy/goal/pypy-c
-"""
-"""
+
 from nbody3d import *
 
 def twoBody ():
@@ -57,30 +56,30 @@ def eightBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies)
 '''
 '''
-def stupidPythonMain ():
+def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	s = eightBody()
-	h0 = hamiltonian(s)
+	scenario = eightBody()
+	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
-	while (n <= s.iterations):
-		stormerVerlet4(s, updateQ, updateP)
-		hNow = hamiltonian(s)
+	while (n <= scenario.iterations):
+		scenario.stormerVerlet4(scenario.updateQ, scenario.updateP)
+		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)
 		dH = tmp if tmp > 0.0 else 1.0e-18
 		if (hNow < hMin):
 			hMin = hNow
 		elif (hNow > hMax):
 			hMax = hNow
-		if ((n % s.outputInterval) == 0):
+		if ((n % scenario.outputInterval) == 0):
 			l = ["["]
-			for i in range(s.np):
-				p = s.particles[i]
+			for i in range(scenario.np):
+				p = scenario.particles[i]
 				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 			print(''.join(l) + "]")
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print("t: " + str(n * s.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(10.0 * math.log10(math.fabs(dH / h0))))
-			if (dbValue > s.errorLimit):
+			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
+			if (dbValue > scenario.errorLimit):
 				print("Hamiltonian error, giving up!")
 				return
 		n += 1

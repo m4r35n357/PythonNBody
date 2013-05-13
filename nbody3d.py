@@ -1,21 +1,4 @@
-#!/opt/pypy-2.0-src/pypy/goal/pypy-c
-##!/usr/bin/env python
-
 import math
-
-class Symplectic(object):
-
-	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies):
-		self.particles = bodies
-		self.np = len(bodies)
-		self.g = g
-		self.timeStep = timeStep
-		self.errorLimit = errorLimit
-		self.outputInterval = outputInterval
-		self.iterations = simulationTime / timeStep
-
-	def __str__(self):
-		return 'np: ' + str(self.np) + ', g: ' + str(self.g) + ', ts: ' + str(self.timeStep) + ', n: ' + str(self.iterations) + ', n: ' + str(self.particles)
 
 class Particle(object):
 
@@ -28,62 +11,73 @@ class Particle(object):
 		self.pZ = pZ
 		self.mass = mass
 
-def distance (xA, yA, zA, xB, yB, zB):
-	return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
+class Symplectic(object):
 
-def hamiltonian (s):  # Energy
-	energy = 0.0
-	for i in range(s.np):
-		a = s.particles[i]
-		energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
-		for j in range(s.np):
-			if (i > j):
-				b = s.particles[j]
-				energy -= s.g * a.mass * b.mass / distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
-	return energy
+	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies):
+		self.particles = bodies
+		self.np = len(bodies)
+		self.g = g
+		self.timeStep = timeStep
+		self.errorLimit = errorLimit
+		self.outputInterval = outputInterval
+		self.iterations = simulationTime / timeStep
 
-def updateQ (s, c):  # Update Positions
-	for i in range(s.np):
-		a = s.particles[i]
-		tmp = c / a.mass * s.timeStep
-		a.qX += a.pX * tmp
-		a.qY += a.pY * tmp
-		a.qZ += a.pZ * tmp
+	def distance (self, xA, yA, zA, xB, yB, zB):
+		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
 
-def updateP (s, c):  # Update Momenta
-	for i in range(s.np):
-		a = s.particles[i]
-		for j in range(s.np):
-			b = s.particles[j]
-			if (i > j):
-				tmp = - c * s.g * a.mass * b.mass / math.pow(distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * s.timeStep
-				dPx = (b.qX - a.qX) * tmp
-				dPy = (b.qY - a.qY) * tmp
-				dPz = (b.qZ - a.qZ) * tmp
-				a.pX -= dPx
-				a.pY -= dPy
-				a.pZ -= dPz
-				b.pX += dPx
-				b.pY += dPy
-				b.pZ += dPz
+	def hamiltonian (self):  # Energy
+		energy = 0.0
+		for i in range(self.np):
+			a = self.particles[i]
+			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
+			for j in range(self.np):
+				if (i > j):
+					b = self.particles[j]
+					energy -= self.g * a.mass * b.mass / self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
+		return energy
 
-def euler (s, first, second):  # First order
-	first(s, 1.0)
-	second(s, 1.0)
+	def updateQ (self, c):  # Update Positions
+		for i in range(self.np):
+			a = self.particles[i]
+			tmp = c / a.mass * self.timeStep
+			a.qX += a.pX * tmp
+			a.qY += a.pY * tmp
+			a.qZ += a.pZ * tmp
 
-def stormerVerlet2 (s, first, second):  # Second order
-	first(s, 0.5)
-	second(s, 1.0)
-	first(s, 0.5)
+	def updateP (self, c):  # Update Momenta
+		for i in range(self.np):
+			a = self.particles[i]
+			for j in range(self.np):
+				b = self.particles[j]
+				if (i > j):
+					tmp = - c * self.g * a.mass * b.mass / math.pow(self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.timeStep
+					dPx = (b.qX - a.qX) * tmp
+					dPy = (b.qY - a.qY) * tmp
+					dPz = (b.qZ - a.qZ) * tmp
+					a.pX -= dPx
+					a.pY -= dPy
+					a.pZ -= dPz
+					b.pX += dPx
+					b.pY += dPy
+					b.pZ += dPz
 
-def stormerVerlet4 (s, first, second):  # Fourth order
-	first(s, 0.6756035959798289)
-	second(s, 1.3512071919596578)
-	first(s, -0.17560359597982883)
-	second(s, -1.7024143839193153)
-	first(s, -0.17560359597982883)
-	second(s, 1.3512071919596578)
-	first(s, 0.6756035959798289)
+	def euler (self, first, second):  # First order
+		first(1.0)
+		second(1.0)
+
+	def stormerVerlet2 (self, first, second):  # Second order
+		first(0.5)
+		second(1.0)
+		first(0.5)
+
+	def stormerVerlet4 (self, first, second):  # Fourth order
+		first(0.6756035959798289)
+		second(1.3512071919596578)
+		first(-0.17560359597982883)
+		second(-1.7024143839193153)
+		first(-0.17560359597982883)
+		second(1.3512071919596578)
+		first(0.6756035959798289)
 
 if __name__ == "__main__":
 	pass
