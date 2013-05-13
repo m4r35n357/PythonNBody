@@ -13,7 +13,7 @@ class Particle(object):
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies):
+	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies, order):
 		self.particles = bodies
 		self.np = len(bodies)
 		self.indices = range(self.np)
@@ -22,6 +22,14 @@ class Symplectic(object):
 		self.errorLimit = errorLimit
 		self.outputInterval = outputInterval
 		self.iterations = simulationTime / timeStep
+		if (order == 1):
+			self.integrator = self.euler
+		elif (order == 2):
+			self.integrator = self.stormerVerlet2
+		elif (order == 4):
+			self.integrator = self.stormerVerlet4
+		else:
+			raise Exception('>>> ERROR! Integrator order must be 1, 2 or 4 <<<')
 
 	def distance (self, xA, yA, zA, xB, yB, zB):
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
@@ -97,6 +105,12 @@ class Symplectic(object):
 		second(1.3512071919596578)
 		first(0.6756035959798289)
 		self.cog()
+
+	def solveQP (self):
+		self.integrator(self.updateQ, self.updateP)
+
+	def solvePQ (self):
+		self.integrator(self.updateP, self.updateQ)
 
 if __name__ == "__main__":
 	pass

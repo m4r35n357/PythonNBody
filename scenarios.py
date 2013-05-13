@@ -11,7 +11,8 @@ def twoBody ():
 	bodies = []
 	bodies.append(Particle(1.0, 2.0, 0.0, 0.1, 0.1, 0.0, 5.0))
 	bodies.append(Particle(2.0, 1.0, 0.0, -0.1, -0.1, 0.0, 1.0))
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies)
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def threeBody ():
 	g = 1.0
@@ -23,8 +24,9 @@ def threeBody ():
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies)
-	
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
+
 def fourBody ():
 	g = 3.5
 	ts = 0.001
@@ -36,7 +38,8 @@ def fourBody ():
 	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
 	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
 	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies)
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def eightBody ():
 	g = 0.05
@@ -53,17 +56,18 @@ def eightBody ():
 	bodies.append(Particle(-4.0, 0.0, -0.1, 0.0, -0.2, -2.6, 3.0))
 	bodies.append(Particle(8.0, 0.0, -0.3, 0.0, 1.2, -0.2, 3.0))
 	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies)
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 '''
 '''
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = threeBody()
+	scenario = threeBody()  # create a symplectic integrator object
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
-		scenario.stormerVerlet4(scenario.updateQ, scenario.updateP)
+		scenario.solveQP()  # perform one integration step
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
@@ -83,7 +87,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 				print("Hamiltonian error, giving up!")
 				return
 		n += 1
-	
+
 if __name__ == "__main__":
 	stupidPythonMain()
 else:
