@@ -22,16 +22,16 @@ class Symplectic(object):
 		self.errorLimit = errorLimit
 		self.outputInterval = outputInterval
 		self.iterations = simulationTime / timeStep
-		if (order == 1):
+		if (order == 1):  # First order
 			self.integrator = self.euler
-		elif (order == 2):
+		elif (order == 2):  # Second order
 			self.integrator = self.stormerVerlet2
-		elif (order == 4):
+		elif (order == 4):  # Fourth order
 			self.integrator = self.stormerVerlet4
-		else:
+		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 1, 2 or 4 <<<')
 
-	def distance (self, xA, yA, zA, xB, yB, zB):
+	def distance (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
 
 	def hamiltonian (self):  # Energy
@@ -70,7 +70,7 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def cog (self):
+	def cog (self):  # Centre of mass/gravity for the scenario, only called by integrators, could be private
 		X = 0.0;
 		Y = 0.0;
 		Z = 0.0;
@@ -106,10 +106,10 @@ class Symplectic(object):
 		first(0.6756035959798289)
 		self.cog()
 
-	def solveQP (self):
+	def solveQP (self):  # Update positions first
 		self.integrator(self.updateQ, self.updateP)
 
-	def solvePQ (self):
+	def solvePQ (self):  # Update momenta first
 		self.integrator(self.updateP, self.updateQ)
 
 if __name__ == "__main__":
