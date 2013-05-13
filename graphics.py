@@ -3,6 +3,7 @@
 
 from __future__ import division
 from visual import *
+from math import *
 from pprint import *
 from nbody3d import *
 
@@ -33,7 +34,7 @@ def make_time_string(t):
 scene.center = (0,0,0)
 scene.width = 800
 scene.height = 600
-scene.range = (2.0, 2.0, 2.0)
+scene.range = (10.0, 10.0, 10.0)
 #scene.range = (1.0e9,1.0e9,1.0e9)
 
 # some approximate data from the internet in scientific notation
@@ -84,6 +85,26 @@ speedOfSatellite = 500 # change this to how fast we think the satellite is going
 #speedOfSatellite = calculatedVelocity # UNCOMMENT TO CHEAT
 
 #satellite.velocity = speedOfSatellite * vector(1,0,0) # m/s from left to right  
+'''
+	BLACK: "#000000",
+	WHITE: "#ffffff",
+	GREY: "#808080",
+	DARKGREY: "#404040",
+	PALEGREY: "#c0c0c0",
+'''
+colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.7, 0.7, 0.7), (1.0, 1.0, 1.0) ]
+
+def earthSun ():
+	g = 6.67e-11
+	ts = dt
+	outputInterval = 1
+	errorLimit = -60.0;
+	simulationTime = 1.0e2
+	bodies = []
+	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, massOfEarth))
+	bodies.append(Particle(0.0, distanceEarthToSatellite, speedOfSatellite * massOfSatellite, 0.0, 0.0, 0.0, massOfSatellite))
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def threeBody ():
 	g = 1.0
@@ -98,36 +119,56 @@ def threeBody ():
 	integratorOrder = 4
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
-def earthSun ():
-	g = 6.67e-11
-	ts = dt
+def fourBody ():
+	g = 3.5
+	ts = 0.01
 	outputInterval = 1
 	errorLimit = -60.0;
-	simulationTime = 1.0e2
+	simulationTime = 1.0e4
 	bodies = []
-	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, massOfEarth))
-	bodies.append(Particle(0.0, distanceEarthToSatellite, speedOfSatellite * massOfSatellite, 0.0, 0.0, 0.0, massOfSatellite))
+	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
+	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
+	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
+	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
 	integratorOrder = 4
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
+def eightBody ():
+	g = 0.05
+	ts = 0.001
+	outputInterval = 1
+	errorLimit = -60.0;
+	simulationTime = 1.0e4
+	bodies = []
+	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0))
+	bodies.append(Particle(0.0, 4.5, 0.4, -0.2, 0.0, 1.8, 2.0))
+	bodies.append(Particle(-6.0, 0.0, -0.4, 0.0, -0.6, 1.0, 3.0))
+	bodies.append(Particle(3.0, 0.0, -0.2, 0.0, 5.8, -0.2, 5.0))
+	bodies.append(Particle(0.0, -4.0, 0.1, -3.6, 0.0, 0.2, 4.0))
+	bodies.append(Particle(-4.0, 0.0, -0.1, 0.0, -0.2, -2.6, 3.0))
+	bodies.append(Particle(8.0, 0.0, -0.3, 0.0, 1.2, -0.2, 3.0))
+	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
+	integratorOrder = 4
+	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
+	
 def plotMappings ():
 	pass
 	
 def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 	n = 0
-	scenario = threeBody()  # create a symplectic integrator object
+	scenario = eightBody()  # create a symplectic integrator object
 	scenario.spheres = []
 	for i in scenario.indices:
 		p = scenario.particles[i]
-		ball = sphere(pos=(p.qX, p.qY, p.qZ), radius=0.01, color=color.blue)
-		ball.trail = curve(color=ball.color)
+		ball = sphere(pos = (p.qX, p.qY, p.qZ), radius = 0.1 * math.pow(p.mass, 1.0 / 3.0), color = colours[i])
+		ball.trail = curve(color = ball.color)
 		scenario.spheres.append(ball)
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
-#	while (n <= scenario.iterations):
-	while (True):
-		rate(50)
+	while (n <= scenario.iterations):
+#	while (True):
+		rate(60)
 		scenario.solveQP()  # perform one integration step	
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
@@ -140,15 +181,14 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 			l = ["["]
 			for i in scenario.indices:
 				p = scenario.particles[i]
-#				scenario.spheres[i].pos = (p.qX, p.qY, p.qZ)
+				ball = scenario.spheres[i]
 				position = (p.qX - scenario.cogX, p.qY - scenario.cogY, p.qZ - scenario.cogZ)
-				scenario.spheres[i].pos = position
-				scenario.spheres[i].trail.append(pos=position)
-#				print(scenario.spheres[i].pos)
+				ball.pos = position
+				ball.trail.append(pos = position)
 				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 #			print(''.join(l) + "]")
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-#			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
+			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
 			if (dbValue > scenario.errorLimit):
 				print("Hamiltonian error, giving up!")
 				return
