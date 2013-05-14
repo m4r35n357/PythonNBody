@@ -1,5 +1,6 @@
 #!/opt/pypy-2.0-src/pypy/goal/pypy-c
 
+import sys
 from nbody3d import *
 
 def twoBody ():
@@ -28,11 +29,11 @@ def threeBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def fourBody ():
-	g = 3.5
-	ts = 0.001
-	outputInterval = 1000
+	g = 3.51
+	ts = 0.01
+	outputInterval = 1
 	errorLimit = -60.0;
-	simulationTime = 1.0e4
+	simulationTime = 1.0e2
 	bodies = []
 	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
 	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
@@ -61,7 +62,7 @@ def eightBody ():
 
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = eightBody()  # create a symplectic integrator object
+	scenario = fourBody()  # create a symplectic integrator object
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
@@ -77,13 +78,13 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		if ((n % scenario.outputInterval) == 0):
 			print scenario.particlesJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh"
+			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh"
 			if (dbValue > scenario.errorLimit):
-				print "Hamiltonian error, giving up!" 
+				print >> sys.stderr, "Hamiltonian error, giving up!" 
 				return
 		n += 1
 
 if __name__ == "__main__":
 	stupidPythonMain()
 else:
-	print __name__ + " module loaded"
+	print >> sys.stderr, __name__ + " module loaded"

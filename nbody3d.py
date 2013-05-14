@@ -1,3 +1,4 @@
+import sys
 import math
 import json
 
@@ -12,12 +13,15 @@ class Particle(object):
 		self.pZ = pZ
 		self.mass = mass
 
+	def __str__(self):
+		return "{\"qX\":" + str(self.qX) + ",\"qY\":" + str(self.qY) + ",\"qZ\":" + str(self.qZ) + ",\"pX\":" + str(self.pX) + ",\"pY\":" + str(self.pY) + ",\"pZ\":" + str(self.pZ) + ",\"mass\":" + str(self.mass) + "}"
+
 class Symplectic(object):
 
 	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies, order):
 		self.particles = bodies
 		self.np = len(bodies)
-		self.indices = range(self.np)
+		self.pRange = range(self.np)
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
@@ -37,7 +41,7 @@ class Symplectic(object):
 
 	def hamiltonian (self):  # Energy
 		energy = 0.0
-		for i in self.indices:
+		for i in self.pRange:
 			a = self.particles[i]
 			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
 			for j in range(self.np):
@@ -47,7 +51,7 @@ class Symplectic(object):
 		return energy
 
 	def updateQ (self, c):  # Update Positions
-		for i in self.indices:
+		for i in self.pRange:
 			a = self.particles[i]
 			tmp = c / a.mass * self.timeStep
 			a.qX += a.pX * tmp
@@ -55,9 +59,9 @@ class Symplectic(object):
 			a.qZ += a.pZ * tmp
 
 	def updateP (self, c):  # Update Momenta
-		for i in self.indices:
+		for i in self.pRange:
 			a = self.particles[i]
-			for j in self.indices:
+			for j in self.pRange:
 				b = self.particles[j]
 				if (i > j):
 					tmp = - c * self.g * a.mass * b.mass / math.pow(self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.timeStep
@@ -76,7 +80,7 @@ class Symplectic(object):
 		Y = 0.0;
 		Z = 0.0;
 		mT = 0.0;
-		for i in self.indices:
+		for i in self.pRange:
 			a = self.particles[i]
 			X += a.qX * a.mass
 			Y += a.qY * a.mass
@@ -114,11 +118,10 @@ class Symplectic(object):
 		self.integrator(self.updateP, self.updateQ)
 
 	def particlesJson (self):
-		l = ["["]
-		for i in self.indices:
-			p = self.particles[i]
-			l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
-		return ''.join(l) + "]"
+		data = []
+		for i in self.pRange:
+			data.append(str(self.particles[i]))
+		return "[" + ','.join(data) + "]"
 
 	def readJson (filename):
 		data = []
@@ -129,4 +132,4 @@ class Symplectic(object):
 if __name__ == "__main__":
 	pass
 else:
-	print __name__ + " module loaded"
+	print >> sys.stderr, __name__ + " module loaded"
