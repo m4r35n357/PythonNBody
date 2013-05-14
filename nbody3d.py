@@ -18,14 +18,14 @@ class Particle(object):
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, errorLimit, outputInterval, bodies, order):
+	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
 		self.particles = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
-		self.outputInterval = outputInterval
+		self.outputInterval = 0.01 / timeStep
 		self.iterations = simulationTime / timeStep
 		if (order == 1):  # First order
 			self.integrator = self.euler
