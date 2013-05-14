@@ -17,8 +17,8 @@ def twoBody ():
 
 def threeBody ():
 	g = 1.0
-	ts = 0.001
-	outputInterval = 1000
+	ts = 0.01
+	outputInterval = 1
 	errorLimit = -60.0;
 	simulationTime = 1.0e4
 	bodies = []
@@ -30,10 +30,10 @@ def threeBody ():
 
 def fourBody ():
 	g = 3.51
-	ts = 0.01
-	outputInterval = 1
+	ts = 0.001
+	outputInterval = 10
 	errorLimit = -60.0;
-	simulationTime = 1.0e2
+	simulationTime = 1.0e4
 	bodies = []
 	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
 	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
@@ -44,8 +44,8 @@ def fourBody ():
 
 def eightBody ():
 	g = 0.05
-	ts = 0.001
-	outputInterval = 1000
+	ts = 0.01
+	outputInterval = 1
 	errorLimit = -60.0;
 	simulationTime = 1.0e4
 	bodies = []

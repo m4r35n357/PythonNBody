@@ -5,21 +5,7 @@ from visual import *
 from math import *
 from pprint import *
 from nbody3d import *
-
-# this converts totalseconds to a nice string (days, hours, minutes and seconds)
-def make_time_string(t):
-    "Accept a number of seconds, return a relative string."
-    if t < 60: return "%02i seconds"%t
-    mins,secs = divmod(t, 60)
-    if mins < 60: return "%02i minutes %02i seconds"%(mins,secs)
-    hours, mins = divmod(mins,60)
-    if hours < 24: return "%02i hours %02i minutes"%(hours,mins)
-    days,hours = divmod(hours,24)
-    return "%02i days %02i hours"%(days,hours)
-
-def readJson ():
-	data = json.load(open('./aaa', 'r'))
-	pprint(data)
+from scenarios import *
 
 def earthSun ():
 	massOfEarth = 5.98e24   # kg
@@ -42,51 +28,6 @@ def earthSun ():
 	integratorOrder = 4
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
-def threeBody ():
-	g = 1.0
-	ts = 0.01
-	outputInterval = 1
-	errorLimit = -60.0;
-	simulationTime = 1.0e4
-	bodies = []
-	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
-	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
-	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	integratorOrder = 4
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
-
-def fourBody ():
-	g = 3.5
-	ts = 0.01
-	outputInterval = 1
-	errorLimit = -60.0;
-	simulationTime = 1.0e4
-	bodies = []
-	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
-	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
-	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
-	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
-	integratorOrder = 4
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
-
-def eightBody ():
-	g = 0.05
-	ts = 0.01
-	outputInterval = 1
-	errorLimit = -60.0;
-	simulationTime = 1.0e4
-	bodies = []
-	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0))
-	bodies.append(Particle(0.0, 4.5, 0.4, -0.2, 0.0, 1.8, 2.0))
-	bodies.append(Particle(-6.0, 0.0, -0.4, 0.0, -0.6, 1.0, 3.0))
-	bodies.append(Particle(3.0, 0.0, -0.2, 0.0, 5.8, -0.2, 5.0))
-	bodies.append(Particle(0.0, -4.0, 0.1, -3.6, 0.0, 0.2, 4.0))
-	bodies.append(Particle(-4.0, 0.0, -0.1, 0.0, -0.2, -2.6, 3.0))
-	bodies.append(Particle(8.0, 0.0, -0.3, 0.0, 1.2, -0.2, 3.0))
-	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
-	integratorOrder = 4
-	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
-	
 def plotMappings ():
 	pass
 	

@@ -17,7 +17,7 @@ rowRange = range(len(data))
 particleRange = range(len(data[0]))
 for i in particleRange:
 	p = data[0][i]
-	ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.05 * math.pow(p['mass'], 1.0 / 3.0), color = colours[i])
+	ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[i])
 	ball.trail = curve(color = ball.color)
 	spheres.append(ball)
 for i in rowRange:
