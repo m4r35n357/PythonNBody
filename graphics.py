@@ -118,7 +118,6 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 		elif (hNow > hMax):
 			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
-#			l = ["["]
 			for i in scenario.indices:
 				p = scenario.particles[i]
 				ball = scenario.spheres[i]
@@ -126,8 +125,6 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 				ball.pos = position
 				ball.trail.append(pos = position)
 #				ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
-#				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
-#			print(''.join(l) + "]")
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
 			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
 			if (dbValue > scenario.errorLimit):

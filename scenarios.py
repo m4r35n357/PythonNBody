@@ -58,8 +58,7 @@ def eightBody ():
 	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
 	integratorOrder = 4
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
-'''
-'''
+
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
 	scenario = eightBody()  # create a symplectic integrator object
@@ -76,11 +75,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		elif (hNow > hMax):
 			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
-			l = ["["]
-			for i in scenario.indices:
-				p = scenario.particles[i]
-				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
-			print(''.join(l) + "]")
+			print(scenario.particlesJson())
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
 			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
 			if (dbValue > scenario.errorLimit):
