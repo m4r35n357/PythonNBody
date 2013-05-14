@@ -4,12 +4,7 @@ from __future__ import division
 from visual import *
 import json
 from pprint import *
-
-def readJson (filename):
-	data = []
-	for line in open(filename, 'r'):
-		data.append(json.loads(line))
-	return data
+from nbody3d import *
 
 scene.center = (0,0,0)
 scene.width = 800
