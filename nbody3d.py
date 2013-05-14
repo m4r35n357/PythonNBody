@@ -1,4 +1,5 @@
 import math
+import json
 
 class Particle(object):
 
@@ -118,6 +119,12 @@ class Symplectic(object):
 			p = self.particles[i]
 			l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 		return ''.join(l) + "]"
+
+	def readJson (filename):
+		data = []
+		for line in open(filename, 'r'):
+			data.append(json.loads(line))
+		return data
 
 if __name__ == "__main__":
 	pass

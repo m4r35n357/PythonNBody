@@ -75,11 +75,11 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		elif (hNow > hMax):
 			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
-			print(scenario.particlesJson())
+			print scenario.particlesJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
+			print "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh"
 			if (dbValue > scenario.errorLimit):
-				print("Hamiltonian error, giving up!")
+				print "Hamiltonian error, giving up!" 
 				return
 		n += 1
 
