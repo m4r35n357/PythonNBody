@@ -53,7 +53,7 @@ def threeBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, outputInterval, bodies, integratorOrder)
 
 def fourBody ():
-	g = 4.0
+	g = 3.51
 	ts = 0.01
 	outputInterval = 1
 	errorLimit = -60.0;
@@ -100,7 +100,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 	scenario.spheres = []
 	for i in scenario.indices:
 		p = scenario.particles[i]
-		ball = sphere(pos = (p.qX, p.qY, p.qZ), radius = 0.1 * math.pow(p.mass, 1.0 / 3.0), color = colours[i])
+		ball = sphere(pos = (p.qX, p.qY, p.qZ), radius = 0.05 * math.pow(p.mass, 1.0 / 3.0), color = colours[i])
 		ball.trail = curve(color = ball.color)
 #		ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
 		scenario.spheres.append(ball)
@@ -129,7 +129,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 #				l.append("{\"Qx\":" + str(p.qX) + ",\"Qy\":" + str(p.qY) + ",\"Qz\":" + str(p.qZ) + ",\"Px\":" + str(p.pX) + ",\"Py\":" + str(p.pY) + ",\"Pz\":" + str(p.pZ) + "},")
 #			print(''.join(l) + "]")
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-#			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
+			print("t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh")
 			if (dbValue > scenario.errorLimit):
 				print("Hamiltonian error, giving up!")
 				return
