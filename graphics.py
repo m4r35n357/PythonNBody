@@ -39,7 +39,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 	arrowScale = 0.2
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.7, 0.7, 0.7), (1.0, 1.0, 1.0) ]
 	n = 0
-	scenario = fourBody()  # create a symplectic integrator object
+	scenario = threeBody()  # create a symplectic integrator object
 	scenario.spheres = []
 	for i in scenario.pRange:
 		p = scenario.particles[i]

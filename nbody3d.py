@@ -33,8 +33,10 @@ class Symplectic(object):
 			self.integrator = self.stormerVerlet2
 		elif (order == 4):  # Fourth order
 			self.integrator = self.stormerVerlet4
+		elif (order == 6):  # Sixth order
+			self.integrator = self.stormerVerlet6
 		else:  # Wrong value for integrator order
-			raise Exception('>>> ERROR! Integrator order must be 1, 2 or 4 <<<')
+			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4 or 6 <<<')
 
 	def distance (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
@@ -44,7 +46,7 @@ class Symplectic(object):
 		for i in self.pRange:
 			a = self.particles[i]
 			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
-			for j in range(self.np):
+			for j in self.pRange:
 				if (i > j):
 					b = self.particles[j]
 					energy -= self.g * a.mass * b.mass / self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
@@ -95,13 +97,27 @@ class Symplectic(object):
 		second(1.0)
 		self.cog()
 
+	def stormerVerletBase (self, first, second, step):
+		first(0.5 * step)
+		second(step)
+		first(0.5 * step)
+
 	def stormerVerlet2 (self, first, second):  # Second order
+		
+		self.stormerVerletBase(first, second, 1.0)
+		'''
 		first(0.5)
 		second(1.0)
 		first(0.5)
+		'''
 		self.cog()
 
 	def stormerVerlet4 (self, first, second):  # Fourth order
+		
+		self.stormerVerletBase(first, second, 1.351207191959657)
+		self.stormerVerletBase(first, second, -1.702414383919315)
+		self.stormerVerletBase(first, second, 1.351207191959657)
+		'''
 		first(0.6756035959798289)
 		second(1.3512071919596578)
 		first(-0.17560359597982883)
@@ -109,6 +125,17 @@ class Symplectic(object):
 		first(-0.17560359597982883)
 		second(1.3512071919596578)
 		first(0.6756035959798289)
+		'''
+		self.cog()
+
+	def stormerVerlet6 (self, first, second):  # Sixth order
+		self.stormerVerletBase(first, second, 0.784513610477560e0)
+		self.stormerVerletBase(first, second, 0.235573213359357e0)
+		self.stormerVerletBase(first, second, -1.17767998417887e0)
+		self.stormerVerletBase(first, second, 1.31518632068391e0)
+		self.stormerVerletBase(first, second, -1.17767998417887e0)
+		self.stormerVerletBase(first, second, 0.235573213359357e0)
+		self.stormerVerletBase(first, second, 0.784513610477560e0)
 		self.cog()
 
 	def solveQP (self):  # Update positions first

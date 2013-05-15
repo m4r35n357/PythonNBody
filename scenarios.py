@@ -16,14 +16,14 @@ def twoBody ():
 
 def threeBody ():
 	g = 1.0
-	ts = 0.01
+	ts = 0.001
 	errorLimit = -60.0;
-	simulationTime = 1.0e4
+	simulationTime = 1.0e3
 	bodies = []
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	integratorOrder = 4
+	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
 def fourBody ():
@@ -58,7 +58,7 @@ def eightBody ():
 
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = fourBody()  # create a symplectic integrator object
+	scenario = threeBody()  # create a symplectic integrator object
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
