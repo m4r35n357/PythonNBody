@@ -25,7 +25,7 @@ class Symplectic(object):
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
-		self.outputInterval = 0.01 / timeStep
+		self.outputInterval = math.ceil(0.01 / timeStep)
 		self.iterations = simulationTime / timeStep
 		if (order == 1):  # First order
 			self.integrator = self.euler

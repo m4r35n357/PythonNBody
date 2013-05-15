@@ -39,7 +39,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 	arrowScale = 0.2
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.7, 0.7, 0.7), (1.0, 1.0, 1.0) ]
 	n = 0
-	scenario = threeBody()  # create a symplectic integrator object
+	scenario = fourBody()  # create a symplectic integrator object
 	scenario.spheres = []
 	for i in scenario.pRange:
 		p = scenario.particles[i]
@@ -69,7 +69,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .n = 0
 				ball.trail.append(pos = position)
 #				ball.varr = arrow(pos = ball.pos, axis = arrowScale * vector(p.pX / p.mass, p.pY / p.mass, p.pZ / p.mass), color = colours[i])
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-#			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh"
+			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh0"
 			if (dbValue > scenario.errorLimit):
 				print >> sys.stderr, "Hamiltonian error, giving up!"
 				return
