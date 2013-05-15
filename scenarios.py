@@ -23,7 +23,7 @@ def threeBody ():
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	integratorOrder = 6
+	integratorOrder = 8
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
 def fourBody ():
@@ -74,7 +74,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		if ((n % scenario.outputInterval) == 0):
 			print scenario.particlesJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh"
+			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh0"
 			if (dbValue > scenario.errorLimit):
 				print >> sys.stderr, "Hamiltonian error, giving up!" 
 				return

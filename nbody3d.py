@@ -35,6 +35,8 @@ class Symplectic(object):
 			self.integrator = self.stormerVerlet4
 		elif (order == 6):  # Sixth order
 			self.integrator = self.stormerVerlet6
+		elif (order == 8):  # Eigthth order
+			self.integrator = self.stormerVerlet8
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4 or 6 <<<')
 
@@ -103,29 +105,13 @@ class Symplectic(object):
 		first(0.5 * step)
 
 	def stormerVerlet2 (self, first, second):  # Second order
-		
 		self.stormerVerletBase(first, second, 1.0)
-		'''
-		first(0.5)
-		second(1.0)
-		first(0.5)
-		'''
 		self.cog()
 
 	def stormerVerlet4 (self, first, second):  # Fourth order
-		
 		self.stormerVerletBase(first, second, 1.351207191959657)
 		self.stormerVerletBase(first, second, -1.702414383919315)
 		self.stormerVerletBase(first, second, 1.351207191959657)
-		'''
-		first(0.6756035959798289)
-		second(1.3512071919596578)
-		first(-0.17560359597982883)
-		second(-1.7024143839193153)
-		first(-0.17560359597982883)
-		second(1.3512071919596578)
-		first(0.6756035959798289)
-		'''
 		self.cog()
 
 	def stormerVerlet6 (self, first, second):  # Sixth order
@@ -137,6 +123,23 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 0.235573213359357e0)
 		self.stormerVerletBase(first, second, 0.784513610477560e0)
 		self.cog()
+
+	def stormerVerlet8 (self, first, second):  # Eighth order
+		self.stormerVerletBase(first, second, 0.104242620869991e1)
+		self.stormerVerletBase(first, second, 0.182020630970714e1)
+		self.stormerVerletBase(first, second, 0.157739928123617e0)
+		self.stormerVerletBase(first, second, 0.244002732616735e1)
+		self.stormerVerletBase(first, second, -0.716989419708120e-2)
+		self.stormerVerletBase(first, second, -0.244699182370524e1)
+		self.stormerVerletBase(first, second, -0.161582374150097e1)
+		self.stormerVerletBase(first, second, -0.17808286265894516e1)
+		self.stormerVerletBase(first, second, -0.161582374150097e1)
+		self.stormerVerletBase(first, second, -0.244699182370524e1)
+		self.stormerVerletBase(first, second, -0.716989419708120e-2)
+		self.stormerVerletBase(first, second, 0.244002732616735e1)
+		self.stormerVerletBase(first, second, 0.157739928123617e0)
+		self.stormerVerletBase(first, second, 0.182020630970714e1)
+		self.stormerVerletBase(first, second, 0.104242620869991e1)
 
 	def solveQP (self):  # Update positions first
 		self.integrator(self.updateQ, self.updateP)
