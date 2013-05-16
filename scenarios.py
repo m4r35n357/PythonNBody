@@ -7,7 +7,7 @@ def twoBody ():
 	g = 0.05
 	ts = 0.001
 	errorLimit = -60.0;
-	simulationTime = 1.0e4
+	simulationTime = 1.0e3
 	bodies = []
 	bodies.append(Particle(1.0, 2.0, 0.0, 0.1, 0.1, 0.0, 5.0))
 	bodies.append(Particle(2.0, 1.0, 0.0, -0.1, -0.1, 0.0, 1.0))
@@ -28,7 +28,7 @@ def threeBody ():
 
 def fourBody ():
 	g = 3.5
-	ts = 0.001
+	ts = 0.0001
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
@@ -43,7 +43,7 @@ def eightBody ():
 	g = 0.05
 	ts = 0.001
 	errorLimit = -60.0;
-	simulationTime = 1.0e4
+	simulationTime = 1.0e3
 	bodies = []
 	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0))
 	bodies.append(Particle(0.0, 4.5, 0.4, -0.2, 0.0, 1.8, 2.0))
@@ -58,7 +58,7 @@ def eightBody ():
 
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = threeBody()  # create a symplectic integrator object
+	scenario = eightBody()  # create a symplectic integrator object
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0

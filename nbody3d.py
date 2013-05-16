@@ -97,7 +97,6 @@ class Symplectic(object):
 	def euler (self, first, second):  # First order
 		first(1.0)
 		second(1.0)
-		self.cog()
 
 	def stormerVerletBase (self, first, second, step):
 		first(0.5 * step)
@@ -106,13 +105,11 @@ class Symplectic(object):
 
 	def stormerVerlet2 (self, first, second):  # Second order
 		self.stormerVerletBase(first, second, 1.0)
-		self.cog()
 
 	def stormerVerlet4 (self, first, second):  # Fourth order
 		self.stormerVerletBase(first, second, 1.351207191959657)
 		self.stormerVerletBase(first, second, -1.702414383919315)
 		self.stormerVerletBase(first, second, 1.351207191959657)
-		self.cog()
 
 	def stormerVerlet6 (self, first, second):  # Sixth order
 		self.stormerVerletBase(first, second, 0.784513610477560e0)
@@ -122,7 +119,6 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, -1.17767998417887e0)
 		self.stormerVerletBase(first, second, 0.235573213359357e0)
 		self.stormerVerletBase(first, second, 0.784513610477560e0)
-		self.cog()
 
 	def stormerVerlet8 (self, first, second):  # Eighth order
 		self.stormerVerletBase(first, second, 0.104242620869991e1)
@@ -143,9 +139,11 @@ class Symplectic(object):
 
 	def solveQP (self):  # Update positions first
 		self.integrator(self.updateQ, self.updateP)
+		self.cog()
 
 	def solvePQ (self):  # Update momenta first
 		self.integrator(self.updateP, self.updateQ)
+		self.cog()
 
 	def particlesJson (self):
 		data = []
