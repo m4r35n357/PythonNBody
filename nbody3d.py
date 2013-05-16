@@ -151,12 +151,6 @@ class Symplectic(object):
 			data.append(str(self.particles[i]))
 		return "[" + ','.join(data) + "]"
 
-def readJson (filename):
-	data = []
-	for line in open(filename, 'r'):
-		data.append(json.loads(line))
-	return data
-
 if __name__ == "__main__":
 	pass
 else:
