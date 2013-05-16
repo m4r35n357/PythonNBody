@@ -35,7 +35,7 @@ class Symplectic(object):
 			self.integrator = self.stormerVerlet4
 		elif (order == 6):  # Sixth order
 			self.integrator = self.stormerVerlet6
-		elif (order == 8):  # Eigthth order
+		elif (order == 8):  # Eighth order
 			self.integrator = self.stormerVerlet8
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4 or 6 <<<')

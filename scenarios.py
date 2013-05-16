@@ -58,7 +58,7 @@ def eightBody ():
 
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
-	scenario = fourBody()  # create a symplectic integrator object
+	scenario = threeBody()  # create a symplectic integrator object
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
