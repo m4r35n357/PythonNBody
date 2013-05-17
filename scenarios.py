@@ -56,8 +56,8 @@ def eightBody ():
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
-def icJson () :
-	ic = json.loads(open(sys.argv[1], 'r').read())
+def icJson (fileName) :
+	ic = json.loads(open(fileName, 'r').read())
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
@@ -66,7 +66,7 @@ def icJson () :
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
 	if len(sys.argv) > 1:
-		scenario = icJson()  # create a symplectic integrator object from JSON input
+		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
 		scenario = fourBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
