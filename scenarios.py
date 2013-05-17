@@ -57,16 +57,7 @@ def eightBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
 def icJson () :
-	icFile = open(sys.argv[1], 'r')
-	ic = json.loads(icFile.read())
-	'''
-	print ic['g']
-	print ic['simulationTime']
-	print ic['ts']
-	print ic['errorLimit']
-	print ic['bodies']
-	print ic['integratorOrder']
-	'''
+	ic = json.loads(open(sys.argv[1], 'r').read())
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
