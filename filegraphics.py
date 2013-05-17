@@ -18,7 +18,14 @@ if __name__ == "__main__":
 
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.5, 0.5, 0.5), (1.0, 1.0, 1.0) ]
 	spheres = []
-
+	'''
+	mylabel = label(pos=(0,distanceEarthToSatellite + 100000000,0))
+    message = "Satellite's distance from earth's surface: %3.f kilometers" % ((distEarthToSatellite-radiusOfEarth)/1000)
+    message += "\nSatellite's speed: %.0f m/s" % mag(satellite.velocity)
+    message += "\nSatellite's acceleration magnitude: %.4f m/s**2" % mag(satellite.acceleration)
+    message += "\nTime: " + make_time_string(totalseconds)
+    mylabel.text = message
+    '''
 	line = dataFile.readline()
 	lineData = json.loads(line)
 	particleRange = range(len(lineData))

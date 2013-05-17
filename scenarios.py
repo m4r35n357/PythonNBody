@@ -66,9 +66,9 @@ def icJson () :
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
 	if len(sys.argv) > 1:
-		scenario = icJson()
+		scenario = icJson()  # create a symplectic integrator object from JSON input
 	else:
-		scenario = threeBody()  # create a symplectic integrator object
+		scenario = fourBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
