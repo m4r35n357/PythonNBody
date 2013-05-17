@@ -1,0 +1,7 @@
+#!/bin/sh
+
+d=${1:-data}
+p=${2:-progress}
+
+time ./scenarios.py >$d 2>$p & ./filegraphics.py $d $p
+

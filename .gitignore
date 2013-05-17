@@ -2,5 +2,6 @@
 *.pyc
 .spyderproject
 *.*~
-aaa
+data
+progress
 
