@@ -79,21 +79,6 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def cog (self):  # Centre of mass/gravity for the scenario, only called by integrators, could be private
-		X = 0.0;
-		Y = 0.0;
-		Z = 0.0;
-		mT = 0.0;
-		for i in self.pRange:
-			a = self.particles[i]
-			X += a.qX * a.mass
-			Y += a.qY * a.mass
-			Z += a.qZ * a.mass
-			mT += a.mass
-		self.cogX = X / mT
-		self.cogY = Y / mT
-		self.cogZ = Z / mT
-
 	def euler (self, first, second):  # First order
 		first(1.0)
 		second(1.0)
@@ -139,11 +124,9 @@ class Symplectic(object):
 
 	def solveQP (self):  # Update positions first
 		self.integrator(self.updateQ, self.updateP)
-		self.cog()
 
 	def solvePQ (self):  # Update momenta first
 		self.integrator(self.updateP, self.updateQ)
-		self.cog()
 
 	def particlesJson (self):
 		data = []
