@@ -5,7 +5,7 @@ from nbody3d import *
 
 def twoBody ():
 	g = 0.05
-	ts = 0.001
+	ts = 0.01
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
@@ -16,19 +16,19 @@ def twoBody ():
 
 def threeBody ():
 	g = 1.0
-	ts = 0.001
+	ts = 0.01
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	integratorOrder = 4
+	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
 def fourBody ():
 	g = 3.5
-	ts = 0.001
+	ts = 0.01
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
@@ -41,7 +41,7 @@ def fourBody ():
 
 def eightBody ():
 	g = 0.05
-	ts = 0.001
+	ts = 0.01
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
