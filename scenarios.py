@@ -23,7 +23,7 @@ def threeBody ():
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	integratorOrder = 6
+	integratorOrder = 4
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
 
 def fourBody ():
@@ -68,7 +68,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = twoBody()  # create a symplectic integrator object using a function above
+		scenario = threeBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
