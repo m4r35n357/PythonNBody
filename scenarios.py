@@ -28,7 +28,7 @@ def threeBody ():
 
 def fourBody ():
 	g = 3.5
-	ts = 0.01
+	ts = 0.02
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
@@ -68,7 +68,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = threeBody()  # create a symplectic integrator object using a function above
+		scenario = fourBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0

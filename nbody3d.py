@@ -66,8 +66,8 @@ class Symplectic(object):
 		for i in self.pRange:
 			a = self.particles[i]
 			for j in self.pRange:
-				b = self.particles[j]
 				if (i > j):
+					b = self.particles[j]
 					tmp = - c * self.g * a.mass * b.mass / math.pow(self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.timeStep
 					dPx = (b.qX - a.qX) * tmp
 					dPy = (b.qY - a.qY) * tmp
