@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ic=$1
+ic=${1:-''}
 
 d=data
 p=progress
