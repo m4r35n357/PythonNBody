@@ -84,7 +84,8 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		if ((n % scenario.outputInterval) == 0):
 			print scenario.particlesJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh0"
+#			print >> sys.stderr, "t: " + str(n * scenario.timeStep) + ", H:" + str(hNow) + ", H0:" + str(h0) + ", H-:" + str(hMin) + ", H+:" + str(hMax) + ", ER:" + str(dbValue) + " dBh0"
+			print >> sys.stderr, 't:%7.2f, H: %.9e, H0: %.9e, H-: %.9e, H+: %.9e, E: %.1e, ER: %6.1f dBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)
 			if (dbValue > scenario.errorLimit):
 				print >> sys.stderr, "Hamiltonian error, giving up!" 
 				return
