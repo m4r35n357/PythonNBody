@@ -28,7 +28,7 @@ def threeBody ():
 
 def fourBody ():
 	g = 3.5
-	ts = 0.02
+	ts = 0.01
 	errorLimit = -60.0;
 	simulationTime = 1.0e3
 	bodies = []
