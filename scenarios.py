@@ -42,6 +42,20 @@ def fourBody ():
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
+def fiveBody ():
+	g = 3.5
+	ts = 0.01
+	errorLimit = -60.0;
+	simulationTime = 1.0e3
+	bodies = []
+	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
+	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
+	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
+	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
+	variant = 0
+	integratorOrder = 6
+	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
+
 def eightBody ():
 	g = 0.05
 	ts = 0.01
@@ -72,20 +86,20 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = threeBody()  # create a symplectic integrator object using a function above
+		scenario = eightBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
 		scenario.solve()  # perform one integration step
-		hNow = scenario.hamiltonian()
-		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
-		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
-		if (hNow < hMin):
-			hMin = hNow
-		elif (hNow > hMax):
-			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
+			hNow = scenario.hamiltonian()
+			tmp = math.fabs(hNow - h0)  # protect log against negative arguments
+			dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
+			if (hNow < hMin):
+				hMin = hNow
+			elif (hNow > hMax):
+				hMax = hNow
 			print scenario.particlesToJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
 			print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)

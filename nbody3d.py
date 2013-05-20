@@ -25,7 +25,7 @@ class Symplectic(object):
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
-		self.outputInterval = math.floor(0.01 / math.fabs(timeStep))
+		self.outputInterval = math.floor(0.1 / math.fabs(timeStep))
 		self.iterations = simulationTime / math.fabs(timeStep)
 		self.variant = variant
 		if (order == 1):  # First order
