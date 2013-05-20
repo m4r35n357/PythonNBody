@@ -15,7 +15,7 @@ class Particle(object):
 
 	def __str__(self):
 #		return "{\"qX\":" + str(self.qX) + ",\"qY\":" + str(self.qY) + ",\"qZ\":" + str(self.qZ) + ",\"pX\":" + str(self.pX) + ",\"pY\":" + str(self.pY) + ",\"pZ\":" + str(self.pZ) + ",\"mass\":" + str(self.mass) + "}"
-		return "{\"qX\":%.18f,\"qY\":%.18f,\"qZ\":%.18f,\"pX\":%.18f,\"pY\":%.18f,\"pZ\":%.18f,\"mass\": %3.1f}" % (self.qX, self.qY, self.qZ, self.pX, self.pY, self.pZ, self.mass)
+		return "{\"qX\":%.6e,\"qY\":%.6e,\"qZ\":%.6e,\"pX\":%.6e,\"pY\":%.6e,\"pZ\":%.6e,\"mass\": %.3e}" % (self.qX, self.qY, self.qZ, self.pX, self.pY, self.pZ, self.mass)
 
 class Symplectic(object):
 
