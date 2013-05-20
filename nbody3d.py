@@ -18,7 +18,7 @@ class Particle(object):
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
+	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, variant, order):
 		self.particles = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
@@ -27,6 +27,7 @@ class Symplectic(object):
 		self.errorLimit = errorLimit
 		self.outputInterval = math.floor(0.01 / math.fabs(timeStep))
 		self.iterations = simulationTime / math.fabs(timeStep)
+		self.variant = variant
 		if (order == 1):  # First order
 			self.integrator = self.euler
 		elif (order == 2):  # Second order
@@ -122,13 +123,13 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 0.182020630970714e1)
 		self.stormerVerletBase(first, second, 0.104242620869991e1)
 
-	def solveQP (self):  # Update positions first
-		self.integrator(self.updateQ, self.updateP)
+	def solve (self):
+		if self.variant == 0:  # Update positions first
+			self.integrator(self.updateQ, self.updateP)
+		elif self.variant == 1:  # Update momenta first
+			self.integrator(self.updateP, self.updateQ)
 
-	def solvePQ (self):  # Update momenta first
-		self.integrator(self.updateP, self.updateQ)
-
-	def particlesJson (self):
+	def particlesToJson (self):
 		data = []
 		for i in self.pRange:
 			data.append(str(self.particles[i]))

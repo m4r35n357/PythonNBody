@@ -11,8 +11,9 @@ def twoBody ():
 	bodies = []
 	bodies.append(Particle(1.0, 2.0, 0.0, 0.1, 0.1, 0.0, 5.0))
 	bodies.append(Particle(2.0, 1.0, 0.0, -0.1, -0.1, 0.0, 1.0))
+	variant = 0
 	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
+	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def threeBody ():
 	g = 1.0
@@ -23,8 +24,9 @@ def threeBody ():
 	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
+	variant = 0
 	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
+	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def fourBody ():
 	g = 3.5
@@ -36,8 +38,9 @@ def fourBody ():
 	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
 	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
 	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
+	variant = 0
 	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
+	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def eightBody ():
 	g = 0.05
@@ -53,15 +56,16 @@ def eightBody ():
 	bodies.append(Particle(-4.0, 0.0, -0.1, 0.0, -0.2, -2.6, 3.0))
 	bodies.append(Particle(8.0, 0.0, -0.3, 0.0, 1.2, -0.2, 3.0))
 	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
+	variant = 0
 	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, integratorOrder)
+	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def icJson (fileName) :
 	ic = json.loads(open(fileName, 'r').read())
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
-	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['integratorOrder'])
+	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['variant'], ic['integratorOrder'])
 
 def stupidPythonMain ():  # need to be inside a function to return . . .
 	n = 0
@@ -73,7 +77,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
-		scenario.solveQP()  # perform one integration step
+		scenario.solve()  # perform one integration step
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
@@ -82,7 +86,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		elif (hNow > hMax):
 			hMax = hNow
 		if ((n % scenario.outputInterval) == 0):
-			print scenario.particlesJson()
+			print scenario.particlesToJson()
 			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
 			print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)
 			if (dbValue > scenario.errorLimit):
