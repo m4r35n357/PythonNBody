@@ -43,15 +43,20 @@ def fourBody ():
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def fiveBody ():
-	g = 3.5
-	ts = 0.01
+	g = 2.95912208286e-4
+	ts = 1.0
 	errorLimit = -60.0;
-	simulationTime = 1.0e3
+	simulationTime = 1.0e4
 	bodies = []
-	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
-	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
-	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
-	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
+	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0))  # Sun
+	mass = 0.000954786104043
+	bodies.append(Particle(-3.5025653, -3.8169847, -1.5507963, 0.00565429 * mass, -0.00412490 * mass, -0.00190589 * mass, mass))  # Jupiter
+	mass = 0.000285583733151
+	bodies.append(Particle(9.0755314, -3.0458353, -1.6483708, 0.00168318 * mass, 0.00483525 * mass, 0.00192462 * mass, mass))
+	mass = 0.0000437273164546
+	bodies.append(Particle(8.3101420, -16.2901086, -7.2521278, 0.00354178 * mass, 0.00137102 * mass, 0.00055029 * mass, mass))
+	mass = 0.0000517759138449
+	bodies.append(Particle(11.4707666, -25.7294829, -10.8169456, 0.00288930 * mass, 0.00114527 * mass, 0.00039677 * mass, mass))
 	variant = 0
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
@@ -86,7 +91,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = eightBody()  # create a symplectic integrator object using a function above
+		scenario = fiveBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0

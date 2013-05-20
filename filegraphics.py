@@ -25,8 +25,8 @@ if __name__ == "__main__":
 	spheres = []
 	for j in particleRange:
 		p = lineData[j]
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
-		ball.trail = curve(color = ball.color)
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 2.0 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
+#		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 
 	while line:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 			ball = spheres[j]
 			position = (p['qX'] - X / mT, p['qY'] - Y / mT, p['qZ'] - Z / mT)
 			ball.pos = position
-			ball.trail.append(pos = position)
+#			ball.trail.append(pos = position)
 		line = dataFile.readline()
 else:
 	print >> sys.stderr, __name__ + " module loaded"
