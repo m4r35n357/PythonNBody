@@ -52,11 +52,11 @@ def fiveBody ():
 	mass = 0.000954786104043
 	bodies.append(Particle(-3.5025653, -3.8169847, -1.5507963, 0.00565429 * mass, -0.00412490 * mass, -0.00190589 * mass, mass))  # Jupiter
 	mass = 0.000285583733151
-	bodies.append(Particle(9.0755314, -3.0458353, -1.6483708, 0.00168318 * mass, 0.00483525 * mass, 0.00192462 * mass, mass))
+	bodies.append(Particle(9.0755314, -3.0458353, -1.6483708, 0.00168318 * mass, 0.00483525 * mass, 0.00192462 * mass, mass))  # Saturn
 	mass = 0.0000437273164546
-	bodies.append(Particle(8.3101420, -16.2901086, -7.2521278, 0.00354178 * mass, 0.00137102 * mass, 0.00055029 * mass, mass))
+	bodies.append(Particle(8.3101420, -16.2901086, -7.2521278, 0.00354178 * mass, 0.00137102 * mass, 0.00055029 * mass, mass))  # Uranus
 	mass = 0.0000517759138449
-	bodies.append(Particle(11.4707666, -25.7294829, -10.8169456, 0.00288930 * mass, 0.00114527 * mass, 0.00039677 * mass, mass))
+	bodies.append(Particle(11.4707666, -25.7294829, -10.8169456, 0.00288930 * mass, 0.00114527 * mass, 0.00039677 * mass, mass))  # Neptune
 	variant = 0
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
@@ -91,26 +91,26 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = fiveBody()  # create a symplectic integrator object using a function above
+		scenario = threeBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
 		scenario.solve()  # perform one integration step
-		if ((n % scenario.outputInterval) == 0):
-			hNow = scenario.hamiltonian()
-			tmp = math.fabs(hNow - h0)  # protect log against negative arguments
-			dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
-			if (hNow < hMin):
-				hMin = hNow
-			elif (hNow > hMax):
-				hMax = hNow
-			print scenario.particlesToJson()
-			dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-			print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)
-			if (dbValue > scenario.errorLimit):
-				print >> sys.stderr, "Hamiltonian error, giving up!" 
-				return
+#		if ((n % scenario.outputInterval) == 0):
+		print scenario.particlesToJson()  # particle data
+		hNow = scenario.hamiltonian()
+		tmp = math.fabs(hNow - h0)  # protect log against negative arguments
+		dH = tmp if tmp > 0.0 else 1.0e-18  # protect log against small arguments
+		if (hNow < hMin):
+			hMin = hNow
+		elif (hNow > hMax):
+			hMax = hNow
+		dbValue = 10.0 * math.log10(math.fabs(dH / h0))
+		print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)  # progress
+		if (dbValue > scenario.errorLimit):
+			print >> sys.stderr, "Hamiltonian error, giving up!" 
+			return
 		n += 1
 
 if __name__ == "__main__":
