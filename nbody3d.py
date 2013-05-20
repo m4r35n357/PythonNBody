@@ -14,7 +14,8 @@ class Particle(object):
 		self.mass = mass
 
 	def __str__(self):
-		return "{\"qX\":" + str(self.qX) + ",\"qY\":" + str(self.qY) + ",\"qZ\":" + str(self.qZ) + ",\"pX\":" + str(self.pX) + ",\"pY\":" + str(self.pY) + ",\"pZ\":" + str(self.pZ) + ",\"mass\":" + str(self.mass) + "}"
+#		return "{\"qX\":" + str(self.qX) + ",\"qY\":" + str(self.qY) + ",\"qZ\":" + str(self.qZ) + ",\"pX\":" + str(self.pX) + ",\"pY\":" + str(self.pY) + ",\"pZ\":" + str(self.pZ) + ",\"mass\":" + str(self.mass) + "}"
+		return "{\"qX\":%.18f,\"qY\":%.18f,\"qZ\":%.18f,\"pX\":%.18f,\"pY\":%.18f,\"pZ\":%.18f,\"mass\": %3.1f}" % (self.qX, self.qY, self.qZ, self.pX, self.pY, self.pZ, self.mass)
 
 class Symplectic(object):
 
@@ -25,7 +26,7 @@ class Symplectic(object):
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
-		self.outputInterval = math.ceil(0.01 / math.fabs(timeStep))
+		self.outputInterval = math.floor(0.01 / math.fabs(timeStep))
 		self.iterations = simulationTime / math.fabs(timeStep)
 		if (order == 1):  # First order
 			self.integrator = self.euler
