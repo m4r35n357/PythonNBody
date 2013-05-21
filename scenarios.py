@@ -16,7 +16,7 @@ def main ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = planets()  # create a symplectic integrator object using a function above
+		scenario = threeBody()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
@@ -31,7 +31,8 @@ def main ():  # need to be inside a function to return . . .
 		elif (hNow > hMax):
 			hMax = hNow
 		dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-		print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)  # progress
+#		print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, E:%.1e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dH, dbValue)  # progress
+		print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * scenario.timeStep, hNow, h0, hMin, hMax, dbValue)  # progress
 		if (dbValue > scenario.errorLimit):
 			print >> sys.stderr, "Hamiltonian error, giving up!" 
 			return

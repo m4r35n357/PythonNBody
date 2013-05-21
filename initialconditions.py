@@ -23,7 +23,7 @@ def threeBody ():
 	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
 	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
 	variant = 0
-	integratorOrder = 6
+	integratorOrder = 10
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def fourBody ():
