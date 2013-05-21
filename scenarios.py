@@ -42,11 +42,11 @@ def fourBody ():
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
-def fiveBody ():
+def planets ():
 	g = 2.95912208286e-4
-	ts = 1.0
-	errorLimit = -60.0;
-	simulationTime = 1.0e4
+	ts = 10.0
+	errorLimit = -30.0;
+	simulationTime = 1.0e5
 	bodies = []
 	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0))  # Sun
 	mass = 0.000954786104043
@@ -58,7 +58,7 @@ def fiveBody ():
 	mass = 0.0000517759138449
 	bodies.append(Particle(11.4707666, -25.7294829, -10.8169456, 0.00288930 * mass, 0.00114527 * mass, 0.00039677 * mass, mass))  # Neptune
 	variant = 0
-	integratorOrder = 6
+	integratorOrder = 1
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
 def eightBody ():
@@ -91,7 +91,7 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = threeBody()  # create a symplectic integrator object using a function above
+		scenario = planets()  # create a symplectic integrator object using a function above
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0
