@@ -19,7 +19,7 @@ if __name__ == "__main__":
 	line = dataFile.readline()
 	lineData = json.loads(line)
 	particleRange = range(len(lineData))
-	
+
 	#  set up the balls
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.5, 0.5, 0.5), (1.0, 1.0, 1.0) ]
 	spheres = []

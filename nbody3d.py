@@ -25,7 +25,6 @@ class Symplectic(object):
 		self.g = g
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
-#		self.outputInterval = math.floor(1.0 / math.fabs(timeStep))
 		self.iterations = simulationTime / math.fabs(timeStep)  # we can run backwards too!
 		self.variant = variant
 		if (order == 1):  # First order
@@ -136,6 +135,6 @@ class Symplectic(object):
 		return "[" + ','.join(data) + "]"
 
 if __name__ == "__main__":
-	pass
+	print >> sys.stderr, __name__ + " is not an executable"
 else:
 	print >> sys.stderr, __name__ + " module loaded"
