@@ -11,7 +11,7 @@ def icJson (fileName) :
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
 	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['variant'], ic['integratorOrder'])
 
-def stupidPythonMain ():  # need to be inside a function to return . . .
+def main ():  # need to be inside a function to return . . .
 	n = 0
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
@@ -38,6 +38,6 @@ def stupidPythonMain ():  # need to be inside a function to return . . .
 		n += 1
 
 if __name__ == "__main__":
-	stupidPythonMain()
+	main()
 else:
 	print >> sys.stderr, __name__ + " module loaded"

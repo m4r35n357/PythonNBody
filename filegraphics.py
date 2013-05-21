@@ -4,7 +4,7 @@ from __future__ import division
 from visual import *
 import json
 
-if __name__ == "__main__":
+def main():
 	if len(sys.argv) > 1:
 		dataFile = open(sys.argv[1], 'r')
 	else:
@@ -49,5 +49,8 @@ if __name__ == "__main__":
 			ball.pos = position
 			ball.trail.append(pos = position)
 		line = dataFile.readline()
+
+if __name__ == "__main__":
+	main()
 else:
 	print >> sys.stderr, __name__ + " module loaded"
