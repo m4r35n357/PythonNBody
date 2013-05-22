@@ -25,7 +25,7 @@ def main():
 	spheres = []
 	for j in particleRange:
 		p = lineData[j]
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 2.0 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 

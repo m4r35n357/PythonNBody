@@ -1,1 +1,24 @@
-{"g":0.05,"ts":0.01,"errorLimit":1.0e-6,"simulationTime":1.0e2,"bodies":[{"qX":1.0,"qY":2.0,"qZ":0.0,"pX":0.1,"pY":0.1,"pZ":0.0,"mass":5.0},{"qX":2.0,"qY":1.0,"qZ":0.0,"pX":-0.1,"pY":-0.1,"pZ":0.0,"mass":1.0}],"variant":0,"integratorOrder":6}
+{ "bodies" : [ { "mass" : 5.0,
+        "pX" : 0.1,
+        "pY" : 0.1,
+        "pZ" : 0.0,
+        "qX" : 1.0,
+        "qY" : 2.0,
+        "qZ" : 0.0
+      },
+      { "mass" : 1.0,
+        "pX" : -0.1,
+        "pY" : -0.1,
+        "pZ" : 0.0,
+        "qX" : 2.0,
+        "qY" : 1.0,
+        "qZ" : 0.0
+      }
+    ],
+  "errorLimit" : -60,
+  "g" : 0.05,
+  "integratorOrder" : 6,
+  "simulationTime" : 100.0,
+  "ts" : 0.01,
+  "variant" : 0
+}

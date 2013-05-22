@@ -1,6 +1,6 @@
 import sys
 from nbody3d import *
-
+'''
 def twoBody ():
 	g = 0.05
 	ts = 0.01
@@ -39,7 +39,7 @@ def fourBody ():
 	variant = 0
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-
+'''
 def planets ():
 	g = 2.95912208286e-4
 	ts = 10.0
