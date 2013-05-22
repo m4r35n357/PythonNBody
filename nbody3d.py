@@ -37,10 +37,10 @@ class Symplectic(object):
 			self.integrator = self.stormerVerlet6
 		elif (order == 8):  # Eighth order
 			self.integrator = self.stormerVerlet8
-		elif (order == 10):  # Eighth order
-			self.integrator = self.stormerVerlet10
+#		elif (order == 10):  # Eighth order
+#			self.integrator = self.stormerVerlet10
 		else:  # Wrong value for integrator order
-			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6, 8 or 10 <<<')
+			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6 or 8 <<<')
 
 	def distance (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
@@ -123,7 +123,7 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 0.19075471029623837995387626)
 		self.stormerVerletBase(first, second, -0.40910082580003159399730010)
 		self.stormerVerletBase(first, second, 0.74167036435061295344822780)
-
+'''
 	def stormerVerlet10 (self, first, second):  # Tenth order
 		self.stormerVerletBase(first, second, 0.09040619368607278492161150)
 		self.stormerVerletBase(first, second, 0.53591815953030120213784983)
@@ -158,7 +158,7 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 0.35123257547493978187517736)
 		self.stormerVerletBase(first, second, 0.53591815953030120213784983)
 		self.stormerVerletBase(first, second, 0.09040619368607278492161150)
-
+'''
 	def solve (self):
 		if self.variant == 0:  # Update positions first
 			self.integrator(self.updateQ, self.updateP)
