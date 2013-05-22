@@ -2,7 +2,6 @@
 
 import sys
 from nbody3d import *
-#from initialconditions import *
 
 def planets ():  # here for the time being, until I get a JSON version written
 	g = 2.95912208286e-4
