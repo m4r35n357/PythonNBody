@@ -1,45 +1,6 @@
 import sys
 from nbody3d import *
-'''
-def twoBody ():
-	g = 0.05
-	ts = 0.01
-	errorLimit = -60.0;
-	simulationTime = 1.0e3
-	bodies = []
-	bodies.append(Particle(1.0, 2.0, 0.0, 0.1, 0.1, 0.0, 5.0))
-	bodies.append(Particle(2.0, 1.0, 0.0, -0.1, -0.1, 0.0, 1.0))
-	variant = 0
-	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
 
-def threeBody ():
-	g = 1.0
-	ts = 0.01
-	errorLimit = -60.0;
-	simulationTime = 1.0e3
-	bodies = []
-	bodies.append(Particle(1.07590, 0.0, 0.0, 0.0, 0.19509, 0.0, 1.0))
-	bodies.append(Particle(-0.07095, 0.0, 0.0, -0.2, -1.23187, 0.0, 1.0))
-	bodies.append(Particle(-1.00496, 0.0, 0.0, 0.0, 1.03678, 0.0, 1.0))
-	variant = 0
-	integratorOrder = 10
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-
-def fourBody ():
-	g = 3.5
-	ts = 0.01
-	errorLimit = -60.0;
-	simulationTime = 1.0e3
-	bodies = []
-	bodies.append(Particle(1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0))
-	bodies.append(Particle(-1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0))
-	bodies.append(Particle(1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0))
-	bodies.append(Particle(-1.0, 1.0, -1.0, -1.0, -1.0, 1.0, 1.0))
-	variant = 0
-	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-'''
 def planets ():
 	g = 2.95912208286e-4
 	ts = 10.0
@@ -58,7 +19,7 @@ def planets ():
 	variant = 0
 	integratorOrder = 1
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-
+'''
 def eightBody ():
 	g = 0.05
 	ts = 0.01
@@ -76,7 +37,7 @@ def eightBody ():
 	variant = 0
 	integratorOrder = 6
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-
+'''
 if __name__ == "__main__":
 	print >> sys.stderr, __name__ + " is not an executable"
 else:
