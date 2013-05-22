@@ -92,9 +92,11 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 1.0)
 
 	def stormerVerlet4 (self, first, second):  # Fourth order
-		self.stormerVerletBase(first, second, 1.351207191959657)
-		self.stormerVerletBase(first, second, -1.702414383919315)
-		self.stormerVerletBase(first, second, 1.351207191959657)
+		qr2 = math.pow(2.0, 1.0 / 3.0);
+		gamma1 = 1.0 / (2.0 - qr2);
+		self.stormerVerletBase(first, second, gamma1)
+		self.stormerVerletBase(first, second, -qr2 * gamma1)
+		self.stormerVerletBase(first, second, gamma1)
 
 	def stormerVerlet6 (self, first, second):  # Sixth order
 		self.stormerVerletBase(first, second, 0.78451361047755726381949763)
