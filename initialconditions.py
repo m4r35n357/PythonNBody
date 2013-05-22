@@ -19,25 +19,7 @@ def planets ():
 	variant = 0
 	integratorOrder = 1
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-'''
-def eightBody ():
-	g = 0.05
-	ts = 0.01
-	errorLimit = -60.0;
-	simulationTime = 1.0e3
-	bodies = []
-	bodies.append(Particle(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0))
-	bodies.append(Particle(0.0, 4.5, 0.4, -0.2, 0.0, 1.8, 2.0))
-	bodies.append(Particle(-6.0, 0.0, -0.4, 0.0, -0.6, 1.0, 3.0))
-	bodies.append(Particle(3.0, 0.0, -0.2, 0.0, 5.8, -0.2, 5.0))
-	bodies.append(Particle(0.0, -4.0, 0.1, -3.6, 0.0, 0.2, 4.0))
-	bodies.append(Particle(-4.0, 0.0, -0.1, 0.0, -0.2, -2.6, 3.0))
-	bodies.append(Particle(8.0, 0.0, -0.3, 0.0, 1.2, -0.2, 3.0))
-	bodies.append(Particle(0.0, 4.0, -0.2, -4.8, 0.0, -0.2, 4.0))
-	variant = 0
-	integratorOrder = 6
-	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-'''
+
 if __name__ == "__main__":
 	print >> sys.stderr, __name__ + " is not an executable"
 else:
