@@ -8,7 +8,7 @@ def main():
 	if len(sys.argv) > 1:
 		dataFile = open(sys.argv[1], 'r')
 	else:
-		raise Exception('>>> ERROR! Please supply a file name <<<')
+		raise Exception('>>> ERROR! Please supply a data file name <<<')
 
 	# scene basics
 	scene.center = (0,0,0)

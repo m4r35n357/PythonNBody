@@ -2,7 +2,7 @@
 
 import sys
 from nbody3d import *
-
+'''
 def planets ():  # here for the time being, until I get a JSON version written
 	g = 2.95912208286e-4
 	ts = 10.0
@@ -21,7 +21,7 @@ def planets ():  # here for the time being, until I get a JSON version written
 	variant = 0
 	integratorOrder = 1
 	return Symplectic(g, simulationTime, ts, errorLimit, bodies, variant, integratorOrder)
-
+'''
 def icJson (fileName) :
 	ic = json.loads(open(fileName, 'r').read())
 	bodies = []
@@ -34,7 +34,9 @@ def main ():  # need to be inside a function to return . . .
 	if len(sys.argv) > 1:
 		scenario = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		scenario = planets()  # create a symplectic integrator object using a function above
+		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
+#		scenario = planets()  # create a symplectic integrator object using a function above
+	print scenario.particlesToJson()  # record initial particle data
 	h0 = scenario.hamiltonian()
 	hMin = h0
 	hMax = h0

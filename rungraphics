@@ -7,5 +7,5 @@ p=progress
 
 time ./scenarios.py $ic >$d 2>$p &
 sleep 1
-./filegraphics.py $d $p
+./filegraphics.py $d
 
