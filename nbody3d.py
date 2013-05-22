@@ -37,8 +37,6 @@ class Symplectic(object):
 			self.integrator = self.stormerVerlet6
 		elif (order == 8):  # Eighth order
 			self.integrator = self.stormerVerlet8
-#		elif (order == 10):  # Eighth order
-#			self.integrator = self.stormerVerlet10
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6 or 8 <<<')
 
@@ -123,42 +121,7 @@ class Symplectic(object):
 		self.stormerVerletBase(first, second, 0.19075471029623837995387626)
 		self.stormerVerletBase(first, second, -0.40910082580003159399730010)
 		self.stormerVerletBase(first, second, 0.74167036435061295344822780)
-'''
-	def stormerVerlet10 (self, first, second):  # Tenth order
-		self.stormerVerletBase(first, second, 0.09040619368607278492161150)
-		self.stormerVerletBase(first, second, 0.53591815953030120213784983)
-		self.stormerVerletBase(first, second, 0.35123257547493978187517736)
-		self.stormerVerletBase(first, second, -0.31116802097815835426086544)
-		self.stormerVerletBase(first, second, -0.52556314194263510431065549)
-		self.stormerVerletBase(first, second, 0.14447909410225247647345695)
-		self.stormerVerletBase(first, second, 0.02983588609748235818064083)
-		self.stormerVerletBase(first, second, 0.17786179923739805133592238)
-		self.stormerVerletBase(first, second, 0.09826906939341637652532377)
-		self.stormerVerletBase(first, second, 0.46179986210411860873242126)
-		self.stormerVerletBase(first, second, -0.33377845599881851314531820)
-		self.stormerVerletBase(first, second, 0.07095684836524793621031152)
-		self.stormerVerletBase(first, second, 0.23666960070126868771909819)
-		self.stormerVerletBase(first, second, -0.49725977950660985445028388)
-		self.stormerVerletBase(first, second, -0.30399616617237257346546356)
-		self.stormerVerletBase(first, second, 0.05246957188100069574521612)
-		self.stormerVerletBase(first, second, 0.44373380805019087955111365)
-		self.stormerVerletBase(first, second, 0.05246957188100069574521612)
-		self.stormerVerletBase(first, second, -0.30399616617237257346546356)
-		self.stormerVerletBase(first, second, -0.49725977950660985445028388)
-		self.stormerVerletBase(first, second, 0.23666960070126868771909819)
-		self.stormerVerletBase(first, second, 0.07095684836524793621031152)
-		self.stormerVerletBase(first, second, -0.33377845599881851314531820)
-		self.stormerVerletBase(first, second, 0.46179986210411860873242126)
-		self.stormerVerletBase(first, second, 0.09826906939341637652532377)
-		self.stormerVerletBase(first, second, 0.17786179923739805133592238)
-		self.stormerVerletBase(first, second, 0.02983588609748235818064083)
-		self.stormerVerletBase(first, second, 0.14447909410225247647345695)
-		self.stormerVerletBase(first, second, -0.52556314194263510431065549)
-		self.stormerVerletBase(first, second, -0.31116802097815835426086544)
-		self.stormerVerletBase(first, second, 0.35123257547493978187517736)
-		self.stormerVerletBase(first, second, 0.53591815953030120213784983)
-		self.stormerVerletBase(first, second, 0.09040619368607278492161150)
-'''
+
 	def solve (self):
 		if self.variant == 0:  # Update positions first
 			self.integrator(self.updateQ, self.updateP)
