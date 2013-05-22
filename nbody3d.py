@@ -134,6 +134,13 @@ class Symplectic(object):
 			data.append(str(self.particles[i]))
 		return "[" + ','.join(data) + "]"
 
+def icJson (fileName) :
+	ic = json.loads(open(fileName, 'r').read())
+	bodies = []
+	for p in ic['bodies']:
+		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
+	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['variant'], ic['integratorOrder'])
+
 if __name__ == "__main__":
 	print >> sys.stderr, __name__ + " is not an executable"
 else:

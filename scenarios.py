@@ -3,13 +3,6 @@
 import sys
 from nbody3d import *
 
-def icJson (fileName) :
-	ic = json.loads(open(fileName, 'r').read())
-	bodies = []
-	for p in ic['bodies']:
-		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
-	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['variant'], ic['integratorOrder'])
-
 def main ():  # need to be inside a function to return . . .
 	n = 0
 	if len(sys.argv) > 1:
