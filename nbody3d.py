@@ -18,7 +18,8 @@ class Particle(object):
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, variant, order):
+	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
+		self.cubeRootTwo = math.pow(2.0, 1.0 / 3.0)
 		self.particles = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
@@ -26,7 +27,6 @@ class Symplectic(object):
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
 		self.iterations = simulationTime / math.fabs(timeStep)  # we can run backwards too!
-		self.variant = variant
 		if (order == 1):  # First order
 			self.integrator = self.euler
 		elif (order == 2):  # Second order
@@ -79,56 +79,49 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def euler (self, first, second):  # First order
-		first(1.0)
-		second(1.0)
+	def euler (self):  # First order
+		self.updateQ(1.0)
+		self.updateP(1.0)
 
-	def stormerVerletBase (self, first, second, step):
-		first(0.5 * step)
-		second(step)
-		first(0.5 * step)
+	def sympBase (self, c):
+		self.updateQ(0.5 * c)
+		self.updateP(c)
+		self.updateQ(0.5 * c)
 
-	def stormerVerlet2 (self, first, second):  # Second order
-		self.stormerVerletBase(first, second, 1.0)
+	def stormerVerlet2 (self):  # Second order
+		self.sympBase(1.0)
 
-	def stormerVerlet4 (self, first, second):  # Fourth order
-		qr2 = math.pow(2.0, 1.0 / 3.0);
-		gamma1 = 1.0 / (2.0 - qr2);
-		self.stormerVerletBase(first, second, gamma1)
-		self.stormerVerletBase(first, second, -qr2 * gamma1)
-		self.stormerVerletBase(first, second, gamma1)
+	def stormerVerlet4 (self):  # Fourth order
+		gamma = 1.0 / (2.0 - self.cubeRootTwo);
+		self.sympBase(gamma)
+		self.sympBase(- self.cubeRootTwo * gamma)
+		self.sympBase(gamma)
 
-	def stormerVerlet6 (self, first, second):  # Sixth order
-		self.stormerVerletBase(first, second, 0.78451361047755726381949763)
-		self.stormerVerletBase(first, second, 0.23557321335935813368479318)
-		self.stormerVerletBase(first, second, -1.17767998417887100694641568)
-		self.stormerVerletBase(first, second, 1.31518632068391121888424973)
-		self.stormerVerletBase(first, second, -1.17767998417887100694641568)
-		self.stormerVerletBase(first, second, 0.23557321335935813368479318)
-		self.stormerVerletBase(first, second, 0.78451361047755726381949763)
+	def stormerVerlet6 (self):  # Sixth order
+		self.sympBase(0.78451361047755726381949763)
+		self.sympBase(0.23557321335935813368479318)
+		self.sympBase(-1.17767998417887100694641568)
+		self.sympBase(1.31518632068391121888424973)
+		self.sympBase(-1.17767998417887100694641568)
+		self.sympBase(0.23557321335935813368479318)
+		self.sympBase(0.78451361047755726381949763)
 
-	def stormerVerlet8 (self, first, second):  # Eighth order
-		self.stormerVerletBase(first, second, 0.74167036435061295344822780)
-		self.stormerVerletBase(first, second, -0.40910082580003159399730010)
-		self.stormerVerletBase(first, second, 0.19075471029623837995387626)
-		self.stormerVerletBase(first, second, -0.57386247111608226665638773)
-		self.stormerVerletBase(first, second, 0.29906418130365592384446354)
-		self.stormerVerletBase(first, second, 0.33462491824529818378495798)
-		self.stormerVerletBase(first, second, 0.31529309239676659663205666)
-		self.stormerVerletBase(first, second, -0.79688793935291635401978884)
-		self.stormerVerletBase(first, second, 0.31529309239676659663205666)
-		self.stormerVerletBase(first, second, 0.33462491824529818378495798)
-		self.stormerVerletBase(first, second, 0.29906418130365592384446354)
-		self.stormerVerletBase(first, second, -0.57386247111608226665638773)
-		self.stormerVerletBase(first, second, 0.19075471029623837995387626)
-		self.stormerVerletBase(first, second, -0.40910082580003159399730010)
-		self.stormerVerletBase(first, second, 0.74167036435061295344822780)
-
-	def solve (self):
-		if self.variant == 0:  # Update positions first
-			self.integrator(self.updateQ, self.updateP)
-		elif self.variant == 1:  # Update momenta first
-			self.integrator(self.updateP, self.updateQ)
+	def stormerVerlet8 (self):  # Eighth order
+		self.sympBase(0.74167036435061295344822780)
+		self.sympBase(-0.40910082580003159399730010)
+		self.sympBase(0.19075471029623837995387626)
+		self.sympBase(-0.57386247111608226665638773)
+		self.sympBase(0.29906418130365592384446354)
+		self.sympBase(0.33462491824529818378495798)
+		self.sympBase(0.31529309239676659663205666)
+		self.sympBase(-0.79688793935291635401978884)
+		self.sympBase(0.31529309239676659663205666)
+		self.sympBase(0.33462491824529818378495798)
+		self.sympBase(0.29906418130365592384446354)
+		self.sympBase(-0.57386247111608226665638773)
+		self.sympBase(0.19075471029623837995387626)
+		self.sympBase(-0.40910082580003159399730010)
+		self.sympBase(0.74167036435061295344822780)
 
 	def particlesToJson (self):
 		data = []
@@ -141,7 +134,7 @@ def icJson (fileName) :
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
-	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['variant'], ic['integratorOrder'])
+	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 if __name__ == "__main__":
 	print >> sys.stderr, __name__ + " is not an executable"

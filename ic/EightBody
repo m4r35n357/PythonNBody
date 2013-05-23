@@ -67,6 +67,5 @@
   "g" : 0.05,
   "integratorOrder" : 6,
   "simulationTime" : 100.0,
-  "ts" : 0.01,
-  "variant" : 0
+  "ts" : 0.01
 }

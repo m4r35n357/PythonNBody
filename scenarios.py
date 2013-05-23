@@ -14,7 +14,7 @@ def main ():  # need to be inside a function to return . . .
 	hMin = h0
 	hMax = h0
 	while (n <= scenario.iterations):
-		scenario.solve()  # perform one full integration step
+		scenario.integrator()  # perform one full integration step
 		print scenario.particlesToJson()  # log particle data
 		hNow = scenario.hamiltonian()
 		tmp = math.fabs(hNow - h0)  # protect logarithm against negative arguments
