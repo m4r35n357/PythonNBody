@@ -128,7 +128,7 @@ def icJson (fileName) :
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
-	return Symplectic(ic['g'], ic['simulationTime'], ic['ts'], ic['errorLimit'], bodies, ic['integratorOrder'])
+	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 if __name__ == "__main__":
 	print >> sys.stderr, __name__ + " is not an executable"
