@@ -15,31 +15,31 @@ def main():
 	scene.range = (10.0, 10.0, 10.0)
 	# get data dimensions
 	line = dataFile.readline()
-	lineData = json.loads(line)
-	particleRange = range(len(lineData))
+	bodies = json.loads(line)
+	pRange = range(len(bodies))
 	#  set up the balls
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.5, 0.5, 0.5), (1.0, 1.0, 1.0) ]
 	spheres = []
-	for j in particleRange:
-		p = lineData[j]
+	for j in pRange:
+		p = bodies[j]
 		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 	while line:
 		rate(60)
-		lineData = json.loads(line)
+		bodies = json.loads(line)
 		X = 0.0;
 		Y = 0.0;
 		Z = 0.0;
 		mT = 0.0;
-		for j in particleRange:  # COG correction
-			p = lineData[j]
+		for j in pRange:  # COG correction
+			p = bodies[j]
 			X += p['qX'] * p['mass']
 			Y += p['qY'] * p['mass']
 			Z += p['qZ'] * p['mass']
 			mT += p['mass']
-		for j in particleRange:
-			p = lineData[j]
+		for j in pRange:
+			p = bodies[j]
 			ball = spheres[j]
 			position = (p['qX'] - X / mT, p['qY'] - Y / mT, p['qZ'] - Z / mT)
 			ball.pos = position

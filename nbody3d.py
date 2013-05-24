@@ -19,54 +19,54 @@ class Particle(object):
 class Symplectic(object):
 
 	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
-		self.cubeRootTwo = math.pow(2.0, 1.0 / 3.0)
-		self.particles = bodies
+		self.cubeRt2 = math.pow(2.0, 1.0 / 3.0)
+		self.bodies = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
 		self.g = g
-		self.timeStep = timeStep
-		self.errorLimit = errorLimit
-		self.iterations = simulationTime / math.fabs(timeStep)  # we can run backwards too!
+		self.ts = timeStep
+		self.eMax = errorLimit
+		self.n = simulationTime / math.fabs(timeStep)  # we can run backwards too!
 		if (order == 2):  # Second order
-			self.integrator = self.stormerVerlet2
+			self.iterate = self.stormerVerlet2
 		elif (order == 4):  # Fourth order
-			self.integrator = self.stormerVerlet4
+			self.iterate = self.stormerVerlet4
 		elif (order == 6):  # Sixth order
-			self.integrator = self.stormerVerlet6
+			self.iterate = self.stormerVerlet6
 		elif (order == 8):  # Eighth order
-			self.integrator = self.stormerVerlet8
+			self.iterate = self.stormerVerlet8
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6 or 8 <<<')
 
-	def distance (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
+	def modR (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
 
-	def hamiltonian (self):  # Energy
+	def h (self):  # Energy
 		energy = 0.0
 		for i in self.pRange:
-			a = self.particles[i]
+			a = self.bodies[i]
 			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
 			for j in self.pRange:
 				if (i > j):
-					b = self.particles[j]
-					energy -= self.g * a.mass * b.mass / self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
+					b = self.bodies[j]
+					energy -= self.g * a.mass * b.mass / self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
 		return energy
 
 	def updateQ (self, c):  # Update Positions
 		for i in self.pRange:
-			a = self.particles[i]
-			tmp = c / a.mass * self.timeStep
+			a = self.bodies[i]
+			tmp = c / a.mass * self.ts
 			a.qX += a.pX * tmp
 			a.qY += a.pY * tmp
 			a.qZ += a.pZ * tmp
 
 	def updateP (self, c):  # Update Momenta
 		for i in self.pRange:
-			a = self.particles[i]
+			a = self.bodies[i]
 			for j in self.pRange:
 				if (i > j):
-					b = self.particles[j]
-					tmp = - c * self.g * a.mass * b.mass / math.pow(self.distance(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.timeStep
+					b = self.bodies[j]
+					tmp = - c * self.g * a.mass * b.mass / math.pow(self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.ts
 					dPx = (b.qX - a.qX) * tmp
 					dPy = (b.qY - a.qY) * tmp
 					dPz = (b.qZ - a.qZ) * tmp
@@ -86,9 +86,9 @@ class Symplectic(object):
 		self.sympBase(1.0)
 
 	def stormerVerlet4 (self):  # Fourth order
-		y = 1.0 / (2.0 - self.cubeRootTwo);
+		y = 1.0 / (2.0 - self.cubeRt2);
 		self.sympBase(y)
-		self.sympBase(- self.cubeRootTwo * y)
+		self.sympBase(- self.cubeRt2 * y)
 		self.sympBase(y)
 
 	def stormerVerlet6 (self):  # Sixth order
@@ -117,10 +117,10 @@ class Symplectic(object):
 		self.sympBase(-0.40910082580003159399730010)
 		self.sympBase(0.74167036435061295344822780)
 
-	def particlesToJson (self):
+	def bodiesJson (self):
 		data = []
 		for i in self.pRange:
-			data.append(str(self.particles[i]))
+			data.append(str(self.bodies[i]))
 		return "[" + ','.join(data) + "]"
 
 def icJson (fileName) :
