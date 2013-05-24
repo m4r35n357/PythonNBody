@@ -41,7 +41,7 @@
 ],
   "errorLimit" : -30,
   "g" : 2.95912208286e-4,
-  "integratorOrder" : 1,
+  "integratorOrder" : 2,
   "simulationTime" : 100000.0,
   "ts" : 10.0
 }

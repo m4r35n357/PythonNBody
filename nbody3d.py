@@ -27,9 +27,7 @@ class Symplectic(object):
 		self.timeStep = timeStep
 		self.errorLimit = errorLimit
 		self.iterations = simulationTime / math.fabs(timeStep)  # we can run backwards too!
-		if (order == 1):  # First order
-			self.integrator = self.euler
-		elif (order == 2):  # Second order
+		if (order == 2):  # Second order
 			self.integrator = self.stormerVerlet2
 		elif (order == 4):  # Fourth order
 			self.integrator = self.stormerVerlet4
@@ -38,7 +36,7 @@ class Symplectic(object):
 		elif (order == 8):  # Eighth order
 			self.integrator = self.stormerVerlet8
 		else:  # Wrong value for integrator order
-			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6 or 8 <<<')
+			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6 or 8 <<<')
 
 	def distance (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
@@ -79,10 +77,6 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def euler (self):  # First order
-		self.updateQ(1.0)
-		self.updateP(1.0)
-
 	def sympBase (self, c):
 		self.updateQ(0.5 * c)
 		self.updateP(c)
@@ -92,10 +86,10 @@ class Symplectic(object):
 		self.sympBase(1.0)
 
 	def stormerVerlet4 (self):  # Fourth order
-		gamma = 1.0 / (2.0 - self.cubeRootTwo);
-		self.sympBase(gamma)
-		self.sympBase(- self.cubeRootTwo * gamma)
-		self.sympBase(gamma)
+		y = 1.0 / (2.0 - self.cubeRootTwo);
+		self.sympBase(y)
+		self.sympBase(- self.cubeRootTwo * y)
+		self.sympBase(y)
 
 	def stormerVerlet6 (self):  # Sixth order
 		self.sympBase(0.78451361047755726381949763)

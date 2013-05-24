@@ -9,17 +9,14 @@ def main():
 		dataFile = open(sys.argv[1], 'r')
 	else:
 		raise Exception('>>> ERROR! Please supply a data file name <<<')
-
 	# scene basics
 	scene.center = (0,0,0)
 	scene.width = scene.height = 1000
 	scene.range = (10.0, 10.0, 10.0)
-
 	# get data dimensions
 	line = dataFile.readline()
 	lineData = json.loads(line)
 	particleRange = range(len(lineData))
-
 	#  set up the balls
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.5, 0.5, 0.5), (1.0, 1.0, 1.0) ]
 	spheres = []
@@ -28,7 +25,6 @@ def main():
 		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
-
 	while line:
 		rate(60)
 		lineData = json.loads(line)
