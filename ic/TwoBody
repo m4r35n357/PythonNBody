@@ -1,4 +1,4 @@
-{ "bodies" : [ { "mass" : 5.0,
+{ "bodies" : [ { "mass" : 1.0,
         "pX" : 0.1,
         "pY" : 0.1,
         "pZ" : 0.0,
@@ -15,9 +15,9 @@
         "qZ" : 0.0
       }
     ],
-  "errorLimit" : -60,
+  "errorLimit" : -30,
   "g" : 0.05,
-  "integratorOrder" : 4,
-  "simulationTime" : 100.0,
-  "timeStep" : 0.01
+  "integratorOrder" : 10,
+  "simulationTime" : 1000.0,
+  "timeStep" : 0.1
 }
