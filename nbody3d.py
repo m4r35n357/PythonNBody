@@ -88,9 +88,9 @@ class Symplectic(object):
 		self.updateP(1.0)
 
 	def sympBase (self, c):  # build higher order integrators by composition
-		self.updateQ(0.5 * c)
+		self.updateQ(c * 0.5)
 		self.updateP(c)
-		self.updateQ(0.5 * c)
+		self.updateQ(c * 0.5)
 
 	def stormerVerlet2 (self):  # Second order
 		self.sympBase(1.0)
