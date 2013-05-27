@@ -63,7 +63,7 @@
         "qZ" : -0.2
       }
     ],
-  "errorLimit" : -60,
+  "errorLimit" : -60.0,
   "g" : 0.05,
   "integratorOrder" : 6,
   "simulationTime" : 1000.0,
