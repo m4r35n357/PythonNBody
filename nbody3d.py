@@ -31,7 +31,8 @@ class Symplectic(object):
 		if (order == 2):  # Second order
 			self.iterate = self.SV2
 		elif (order == 4):  # Fourth order
-			self.cubeRt2 = 2.0**(1.0 / 3.0)
+			self.cbrt2 = 2.0**(1.0 / 3.0)
+			self.y = 1.0 / (2.0 - self.cbrt2)
 			self.iterate = self.SV4
 		elif (order == 6):  # Sixth order
 			self.iterate = self.SV6
@@ -90,10 +91,9 @@ class Symplectic(object):
 		self.sympBase(1.0)
 
 	def SV4 (self):  # Fourth order
-		y = 1.0 / (2.0 - self.cubeRt2);
-		self.sympBase(y)
-		self.sympBase(- self.cubeRt2 * y)
-		self.sympBase(y)
+		self.sympBase(self.y)
+		self.sympBase(- self.y * self.cbrt2)
+		self.sympBase(self.y)
 
 	def SV6 (self):  # Sixth order
 		self.sympBase(0.78451361047755726381949763)
