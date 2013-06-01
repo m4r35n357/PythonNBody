@@ -1,4 +1,4 @@
-#!/opt/pypy-2.0-src/pypy/goal/pypy-c
+#!/opt/pypy-2.0.2-src/pypy/goal/pypy-c
 
 from sys import argv, stderr
 from math import fabs, log10, sqrt
