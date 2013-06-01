@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import division
 from sys import argv
 from visual import scene, sphere, curve, rate
 from json import loads
