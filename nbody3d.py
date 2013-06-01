@@ -21,7 +21,6 @@ class Particle(object):
 class Symplectic(object):
 
 	def __init__(self, g, runTime, timeStep, errorLimit, bodies, order):
-		self.cubeRt2 = 2.0**(1.0 / 3.0)
 		self.bodies = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
@@ -29,11 +28,10 @@ class Symplectic(object):
 		self.ts = timeStep
 		self.eMax = errorLimit
 		self.n = runTime / fabs(timeStep)  # We can run backwards too!
-		if (order == 1):  # First order
-			self.iterate = self.euler
-		elif (order == 2):  # Second order
+		if (order == 2):  # Second order
 			self.iterate = self.SV2
 		elif (order == 4):  # Fourth order
+			self.cubeRt2 = 2.0**(1.0 / 3.0)
 			self.iterate = self.SV4
 		elif (order == 6):  # Sixth order
 			self.iterate = self.SV6
@@ -42,7 +40,7 @@ class Symplectic(object):
 		elif (order == 10):  # Tenth order
 			self.iterate = self.SV10
 		else:  # Wrong value for integrator order
-			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6, 8 or 10 <<<')
+			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6, 8 or 10 <<<')
 
 	def dist (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return sqrt((xB - xA)**2 + (yB - yA)**2 + (zB - zA)**2)
@@ -82,10 +80,6 @@ class Symplectic(object):
 					b.pX += dPx
 					b.pY += dPy
 					b.pZ += dPz
-
-	def euler (self):  # First order
-		self.updateQ(1.0)
-		self.updateP(1.0)
 
 	def sympBase (self, c):  # Build higher order integrators by composition
 		self.updateQ(c * 0.5)
