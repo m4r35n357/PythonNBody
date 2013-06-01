@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 from __future__ import division
-from visual import *
-import json
+from sys import argv
+from math import pow
+from visual import scene, sphere, curve, rate
+from json import loads
 
 def main():
-	if len(sys.argv) > 1:
-		dataFile = open(sys.argv[1], 'r')
+	if len(argv) > 1:
+		dataFile = open(argv[1], 'r')
 	else:
 		raise Exception('>>> ERROR! Please supply a data file name <<<')
 	# scene basics
@@ -15,19 +17,19 @@ def main():
 	scene.range = (10.0, 10.0, 10.0)
 	# get data dimensions
 	line = dataFile.readline()
-	bodies = json.loads(line)
+	bodies = loads(line)
 	pRange = range(len(bodies))
 	#  set up the balls
 	colours = [ (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.5, 0.5, 0.5), (1.0, 1.0, 1.0) ]
 	spheres = []
 	for j in pRange:
 		p = bodies[j]
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * math.pow(p['mass'], 1.0 / 3.0), color = colours[j])
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * pow(p['mass'], 1.0 / 3.0), color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 	while line:
 		rate(60)
-		bodies = json.loads(line)
+		bodies = loads(line)
 		X = 0.0;
 		Y = 0.0;
 		Z = 0.0;

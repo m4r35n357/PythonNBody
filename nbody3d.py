@@ -1,8 +1,8 @@
 #!/opt/pypy-2.0-src/pypy/goal/pypy-c
 
-import sys
-import math
-import json
+from sys import argv, stderr
+from math import fabs, log10, pow, sqrt
+from json import loads
 
 class Particle(object):
 
@@ -21,14 +21,14 @@ class Particle(object):
 class Symplectic(object):
 
 	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
-		self.cubeRt2 = math.pow(2.0, 1.0 / 3.0)
+		self.cubeRt2 = pow(2.0, 1.0 / 3.0)
 		self.bodies = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
 		self.g = g
 		self.ts = timeStep
 		self.eMax = errorLimit
-		self.n = simulationTime / math.fabs(timeStep)  # we can run backwards too!
+		self.n = simulationTime / fabs(timeStep)  # we can run backwards too!
 		if (order == 1):  # First order
 			self.iterate = self.euler
 		elif (order == 2):  # Second order
@@ -45,7 +45,7 @@ class Symplectic(object):
 			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6, 8 or 10 <<<')
 
 	def modR (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
-		return math.sqrt(math.pow(xB - xA, 2) + math.pow(yB - yA, 2) + math.pow(zB - zA, 2))
+		return sqrt(pow(xB - xA, 2) + pow(yB - yA, 2) + pow(zB - zA, 2))
 
 	def h (self):  # Energy
 		energy = 0.0
@@ -72,7 +72,7 @@ class Symplectic(object):
 			for j in self.pRange:
 				if (i > j):
 					b = self.bodies[j]
-					tmp = - c * self.g * a.mass * b.mass / math.pow(self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.ts
+					tmp = - c * self.g * a.mass * b.mass / pow(self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.ts
 					dPx = (b.qX - a.qX) * tmp
 					dPy = (b.qY - a.qY) * tmp
 					dPz = (b.qZ - a.qZ) * tmp
@@ -169,7 +169,7 @@ class Symplectic(object):
 		return "[" + ','.join(data) + "]"
 
 def icJson (fileName):
-	ic = json.loads(open(fileName, 'r').read())
+	ic = loads(open(fileName, 'r').read())
 	bodies = []
 	for p in ic['bodies']:
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
@@ -177,10 +177,10 @@ def icJson (fileName):
 
 def main ():  # need to be inside a function to return . . .
 	n = 0
-	if len(sys.argv) > 1:
-		s = icJson(sys.argv[1])  # create a symplectic integrator object from JSON input
+	if len(argv) > 1:
+		s = icJson(argv[1])  # create a symplectic integrator object from JSON input
 	else:
-		raise Exception('>>> ERROR! Please supply a s file name <<<')
+		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
 	print s.bodiesJson()  # log initial particle data
 	h0 = s.h()  # set up error reporting
 	hMin = h0
@@ -189,16 +189,16 @@ def main ():  # need to be inside a function to return . . .
 		s.iterate()  # perform one full integration step
 		print s.bodiesJson()  # log particle data
 		hNow = s.h()
-		tmp = math.fabs(hNow - h0)  # protect logarithm against negative arguments
+		tmp = fabs(hNow - h0)  # protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # protect logarithm against small arguments
 		if (hNow < hMin):  # low tide
 			hMin = hNow
 		elif (hNow > hMax):  # high tide
 			hMax = hNow
-		dbValue = 10.0 * math.log10(math.fabs(dH / h0))
-		print >> sys.stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # log progress
+		dbValue = 10.0 * log10(fabs(dH / h0))
+		print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # log progress
 		if (dbValue > s.eMax):
-			print >> sys.stderr, "Hamiltonian error is %.1fdBh0 (limit: %.1fdBh0), giving up!" % (dbValue, s.eMax)
+			print >> stderr, "Hamiltonian error is %.1fdBh0 (limit: %.1fdBh0), giving up!" % (dbValue, s.eMax)
 			return
 		n += 1
 
