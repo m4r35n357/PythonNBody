@@ -24,16 +24,13 @@ def main():
 	spheres = []
 	for j in pRange:
 		p = bodies[j]
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * pow(p['mass'], 1.0 / 3.0), color = colours[j])
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 	while line:
 		rate(60)
 		bodies = loads(line)
-		X = 0.0;
-		Y = 0.0;
-		Z = 0.0;
-		mT = 0.0;
+		X = Y = Z = mT = 0.0;
 		for j in pRange:  # COG correction
 			p = bodies[j]
 			X += p['qX'] * p['mass']

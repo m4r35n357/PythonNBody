@@ -1,7 +1,7 @@
 #!/opt/pypy-2.0-src/pypy/goal/pypy-c
 
 from sys import argv, stderr
-from math import fabs, log10, pow, sqrt
+from math import fabs, log10, sqrt
 from json import loads
 
 class Particle(object):
@@ -20,42 +20,42 @@ class Particle(object):
 
 class Symplectic(object):
 
-	def __init__(self, g, simulationTime, timeStep, errorLimit, bodies, order):
-		self.cubeRt2 = pow(2.0, 1.0 / 3.0)
+	def __init__(self, g, runTime, timeStep, errorLimit, bodies, order):
+		self.cubeRt2 = 2.0**(1.0 / 3.0)
 		self.bodies = bodies
 		self.np = len(bodies)
 		self.pRange = range(self.np)
 		self.g = g
 		self.ts = timeStep
 		self.eMax = errorLimit
-		self.n = simulationTime / fabs(timeStep)  # we can run backwards too!
+		self.n = runTime / fabs(timeStep)  # We can run backwards too!
 		if (order == 1):  # First order
 			self.iterate = self.euler
 		elif (order == 2):  # Second order
-			self.iterate = self.stormerVerlet2
+			self.iterate = self.SV2
 		elif (order == 4):  # Fourth order
-			self.iterate = self.stormerVerlet4
+			self.iterate = self.SV4
 		elif (order == 6):  # Sixth order
-			self.iterate = self.stormerVerlet6
+			self.iterate = self.SV6
 		elif (order == 8):  # Eighth order
-			self.iterate = self.stormerVerlet8
+			self.iterate = self.SV8
 		elif (order == 10):  # Tenth order
-			self.iterate = self.stormerVerlet10
+			self.iterate = self.SV10
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 1, 2, 4, 6, 8 or 10 <<<')
 
-	def modR (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
-		return sqrt(pow(xB - xA, 2) + pow(yB - yA, 2) + pow(zB - zA, 2))
+	def dist (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
+		return sqrt((xB - xA)**2 + (yB - yA)**2 + (zB - zA)**2)
 
-	def h (self):  # Energy
+	def h (self):  # Conserved energy
 		energy = 0.0
 		for i in self.pRange:
 			a = self.bodies[i]
-			energy += 0.5 * (a.pX * a.pX + a.pY * a.pY + a.pZ * a.pZ) / a.mass
+			energy += 0.5 * (a.pX**2 + a.pY**2 + a.pZ**2) / a.mass
 			for j in self.pRange:
 				if (i > j):
 					b = self.bodies[j]
-					energy -= self.g * a.mass * b.mass / self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
+					energy -= self.g * a.mass * b.mass / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
 		return energy
 
 	def updateQ (self, c):  # Update Positions
@@ -72,10 +72,10 @@ class Symplectic(object):
 			for j in self.pRange:
 				if (i > j):
 					b = self.bodies[j]
-					tmp = - c * self.g * a.mass * b.mass / pow(self.modR(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ), 3) * self.ts
-					dPx = (b.qX - a.qX) * tmp
-					dPy = (b.qY - a.qY) * tmp
-					dPz = (b.qZ - a.qZ) * tmp
+					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)**3
+					dPx = tmp * (b.qX - a.qX)
+					dPy = tmp * (b.qY - a.qY)
+					dPz = tmp * (b.qZ - a.qZ)
 					a.pX -= dPx
 					a.pY -= dPy
 					a.pZ -= dPz
@@ -87,21 +87,21 @@ class Symplectic(object):
 		self.updateQ(1.0)
 		self.updateP(1.0)
 
-	def sympBase (self, c):  # build higher order integrators by composition
+	def sympBase (self, c):  # Build higher order integrators by composition
 		self.updateQ(c * 0.5)
 		self.updateP(c)
 		self.updateQ(c * 0.5)
 
-	def stormerVerlet2 (self):  # Second order
+	def SV2 (self):  # Second order
 		self.sympBase(1.0)
 
-	def stormerVerlet4 (self):  # Fourth order
+	def SV4 (self):  # Fourth order
 		y = 1.0 / (2.0 - self.cubeRt2);
 		self.sympBase(y)
 		self.sympBase(- self.cubeRt2 * y)
 		self.sympBase(y)
 
-	def stormerVerlet6 (self):  # Sixth order
+	def SV6 (self):  # Sixth order
 		self.sympBase(0.78451361047755726381949763)
 		self.sympBase(0.23557321335935813368479318)
 		self.sympBase(-1.17767998417887100694641568)
@@ -110,7 +110,7 @@ class Symplectic(object):
 		self.sympBase(0.23557321335935813368479318)
 		self.sympBase(0.78451361047755726381949763)
 
-	def stormerVerlet8 (self):  # Eighth order
+	def SV8 (self):  # Eighth order
 		self.sympBase(0.74167036435061295344822780)
 		self.sympBase(-0.40910082580003159399730010)
 		self.sympBase(0.19075471029623837995387626)
@@ -127,7 +127,7 @@ class Symplectic(object):
 		self.sympBase(-0.40910082580003159399730010)
 		self.sympBase(0.74167036435061295344822780)
 
-	def stormerVerlet10 (self):  # Tenth order
+	def SV10 (self):  # Tenth order
 		self.sympBase(0.09040619368607278492161150)
 		self.sympBase(0.53591815953030120213784983)
 		self.sympBase(0.35123257547493978187517736)
@@ -175,28 +175,26 @@ def icJson (fileName):
 		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
 	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
-def main ():  # need to be inside a function to return . . .
+def main ():  # Need to be inside a function to return . . .
 	n = 0
 	if len(argv) > 1:
-		s = icJson(argv[1])  # create a symplectic integrator object from JSON input
+		s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
 	else:
 		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
-	print s.bodiesJson()  # log initial particle data
-	h0 = s.h()  # set up error reporting
-	hMin = h0
-	hMax = h0
+	print s.bodiesJson()  # Log initial particle data
+	h0 = hMax = hMin = s.h()  # Set up error reporting
 	while (n <= s.n):
-		s.iterate()  # perform one full integration step
-		print s.bodiesJson()  # log particle data
+		s.iterate()  # Perform one full integration step
+		print s.bodiesJson()  # Log particle data
 		hNow = s.h()
-		tmp = fabs(hNow - h0)  # protect logarithm against negative arguments
-		dH = tmp if tmp > 0.0 else 1.0e-18  # protect logarithm against small arguments
-		if (hNow < hMin):  # low tide
+		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
+		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments
+		if (hNow < hMin):  # Low tide
 			hMin = hNow
-		elif (hNow > hMax):  # high tide
+		elif (hNow > hMax):  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0))
-		print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # log progress
+		print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # Log progress
 		if (dbValue > s.eMax):
 			print >> stderr, "Hamiltonian error is %.1fdBh0 (limit: %.1fdBh0), giving up!" % (dbValue, s.eMax)
 			return
