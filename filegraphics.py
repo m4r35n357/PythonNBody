@@ -6,10 +6,9 @@ from visual import scene, sphere, curve, rate
 from json import loads
 
 def main():
-	if len(argv) > 1:
-		dataFile = open(argv[1], 'r')
-	else:
+	if len(argv) < 2:
 		raise Exception('>>> ERROR! Please supply a data file name <<<')
+	dataFile = open(argv[1], 'r')
 	# scene basics
 	scene.center = (0,0,0)
 	scene.width = scene.height = 1000

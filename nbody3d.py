@@ -177,10 +177,9 @@ def icJson (fileName):
 
 def main ():  # Need to be inside a function to return . . .
 	n = 0
-	if len(argv) > 1:
-		s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
-	else:
+	if len(argv) < 2:
 		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
+	s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
 	print s.bodiesJson()  # Log initial particle data
 	h0 = hMax = hMin = s.h()  # Set up error reporting
 	while (n <= s.n):
