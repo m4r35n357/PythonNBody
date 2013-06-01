@@ -2,7 +2,6 @@
 
 from __future__ import division
 from sys import argv
-from math import pow
 from visual import scene, sphere, curve, rate
 from json import loads
 
