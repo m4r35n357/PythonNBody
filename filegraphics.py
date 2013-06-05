@@ -11,7 +11,8 @@ def main():
 	# scene basics
 	scene.center = (0,0,0)
 	scene.width = scene.height = 1000
-	scene.range = (10.0, 10.0, 10.0)
+#	scene.range = (10.0, 10.0, 10.0)
+	scene.range = (1.0e8, 1.0e8, 1.0e8)
 	# get data dimensions
 	line = dataFile.readline()
 	bodies = loads(line)
@@ -21,7 +22,8 @@ def main():
 	spheres = []
 	for j in pRange:
 		p = bodies[j]
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
+#		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 1000000.0, color = colours[j])
 		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 	while line:

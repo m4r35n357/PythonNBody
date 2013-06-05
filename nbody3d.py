@@ -166,7 +166,9 @@ def icJson (fileName):
 	ic = loads(open(fileName, 'r').read())
 	bodies = []
 	for p in ic['bodies']:
-		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
+#		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
+		mass = p['mass']
+		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['vX'] * mass, p['vY'] * mass, p['vZ'] * mass, mass))
 	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 def main ():  # Need to be inside a function to return . . .
