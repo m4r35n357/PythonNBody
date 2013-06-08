@@ -165,19 +165,24 @@ class Symplectic(object):
 def icJson (fileName):
 	ic = loads(open(fileName, 'r').read())
 	bodies = []
-	for p in ic['bodies']:
-#		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['pX'], p['pY'], p['pZ'], p['mass']))
-		mass = p['mass']
-		bodies.append(Particle(p['qX'], p['qY'], p['qZ'], p['vX'] * mass, p['vY'] * mass, p['vZ'] * mass, mass))
+	for a in ic['bodies']:
+		if 'pX' in a and 'pY' in a and 'pZ' in a:  # momenta specified
+			bodies.append(Particle(a['qX'], a['qY'], a['qZ'], a['pX'], a['pY'], a['pZ'], a['mass']))
+		elif 'vX' in a and 'vY' in a and 'vZ' in a:  # velocities specified, convert to momenta
+			mass = a['mass']
+			bodies.append(Particle(a['qX'], a['qY'], a['qZ'], mass * a['vX'], mass * a['vY'], mass * a['vZ'], mass))
+		else:
+			raise Exception('>>> ERROR! Specify either momenta or velocites consistently <<<')
 	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 def main ():  # Need to be inside a function to return . . .
-	n = 0
+	n = 1
 	if len(argv) < 2:
 		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
 	s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
-	print s.bodiesJson()  # Log initial particle data
 	h0 = hMax = hMin = s.h()  # Set up error reporting
+	print s.bodiesJson()  # Log initial particle data
+	print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (0.0, h0, h0, h0, h0, -999.9)  # Log initial progress
 	while (n <= s.n):
 		s.iterate()  # Perform one full integration step
 		print s.bodiesJson()  # Log particle data
