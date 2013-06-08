@@ -176,16 +176,15 @@ def icJson (fileName):
 	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 def main ():  # Need to be inside a function to return . . .
-	n = 1
 	if len(argv) < 2:
 		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
 	s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
 	h0 = hMax = hMin = s.h()  # Set up error reporting
 	print s.bodiesJson()  # Log initial particle data
 	print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (0.0, h0, h0, h0, h0, -999.9)  # Log initial progress
+	n = 1
 	while (n <= s.n):
 		s.iterate()  # Perform one full integration step
-		print s.bodiesJson()  # Log particle data
 		hNow = s.h()
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments
@@ -194,6 +193,7 @@ def main ():  # Need to be inside a function to return . . .
 		elif (hNow > hMax):  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0))
+		print s.bodiesJson()  # Log particle data
 		print >> stderr, 't:%.2f, H:%.9e, H0:%.9e, H-:%.9e, H+:%.9e, ER:%.1fdBh0' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # Log progress
 		if (dbValue > s.eMax):
 			print >> stderr, "Hamiltonian error is %.1fdBh0 (limit: %.1fdBh0), giving up!" % (dbValue, s.eMax)
