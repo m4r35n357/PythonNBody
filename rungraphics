@@ -1,13 +1,15 @@
 #!/bin/sh
 
 ic=${1:-''}
-interval=${2:-1}
 
 d=data
 p=progress
 
 ./nbody3d.py $ic >$d 2>$p &
+PID=$!
 sleep 1
 ./filegraphics.py $d &
-./fileprogress.py $p $interval &
+wait $PID
+set $(wc -l $p)
+./fileprogress.py $p $(($1 / 10000)) &
 
