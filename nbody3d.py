@@ -128,6 +128,10 @@ class Symplectic(object):
 			data.append(str(self.bodies[i]))
 		return "[" + ','.join(data) + "]"
 
+	def print_out (self, time, hNow, h0, hMin, hMax, dbValue):
+		print self.bodiesJson()  # Log particle data
+		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (time, hNow, h0, hMin, hMax, dbValue)  # Log progress
+
 def icJson (fileName):
 	ic = loads(open(fileName, 'r').read())
 	bodies = []
@@ -146,8 +150,9 @@ def main ():  # Need to be inside a function to return . . .
 		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
 	s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
 	h0 = hMax = hMin = s.h()  # Set up error reporting
-	print s.bodiesJson()  # Log initial particle data
-	print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (0.0, h0, h0, h0, h0, -999.9)  # Log initial progress
+#	print s.bodiesJson()  # Log initial particle data
+#	print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (0.0, h0, h0, h0, h0, -999.9)  # Log initial progress
+	s.print_out(0.0, h0, h0, h0, h0, -999.9)
 	n = 1
 	while (n <= s.n):
 		s.solve()  # Perform one full integration step
@@ -159,8 +164,9 @@ def main ():  # Need to be inside a function to return . . .
 		elif (hNow > hMax):  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0))
-		print s.bodiesJson()  # Log particle data
-		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # Log progress
+#		print s.bodiesJson()  # Log particle data
+#		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # Log progress
+		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
 		if (dbValue > s.eMax):
 			return
 		n += 1
