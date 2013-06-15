@@ -115,75 +115,6 @@ class Symplectic(object):
 		self.updateP(c)
 		self.updateQ(c * 0.5)
 
-	def SV2 (self):  # Second order
-		self.sympBase(1.0)
-
-	def SV4 (self):  # Fourth order
-		self.sympBase(self.y)
-		self.sympBase(- self.y * self.cbrt2)
-		self.sympBase(self.y)
-
-	def SV6 (self):  # Sixth order
-		self.sympBase(0.78451361047755726381949763)
-		self.sympBase(0.23557321335935813368479318)
-		self.sympBase(-1.17767998417887100694641568)
-		self.sympBase(1.31518632068391121888424973)
-		self.sympBase(-1.17767998417887100694641568)
-		self.sympBase(0.23557321335935813368479318)
-		self.sympBase(0.78451361047755726381949763)
-
-	def SV8 (self):  # Eighth order
-		self.sympBase(0.74167036435061295344822780)
-		self.sympBase(-0.40910082580003159399730010)
-		self.sympBase(0.19075471029623837995387626)
-		self.sympBase(-0.57386247111608226665638773)
-		self.sympBase(0.29906418130365592384446354)
-		self.sympBase(0.33462491824529818378495798)
-		self.sympBase(0.31529309239676659663205666)
-		self.sympBase(-0.79688793935291635401978884)
-		self.sympBase(0.31529309239676659663205666)
-		self.sympBase(0.33462491824529818378495798)
-		self.sympBase(0.29906418130365592384446354)
-		self.sympBase(-0.57386247111608226665638773)
-		self.sympBase(0.19075471029623837995387626)
-		self.sympBase(-0.40910082580003159399730010)
-		self.sympBase(0.74167036435061295344822780)
-
-	def SV10 (self):  # Tenth order
-		self.sympBase(0.09040619368607278492161150)
-		self.sympBase(0.53591815953030120213784983)
-		self.sympBase(0.35123257547493978187517736)
-		self.sympBase(-0.31116802097815835426086544)
-		self.sympBase(-0.52556314194263510431065549)
-		self.sympBase(0.14447909410225247647345695)
-		self.sympBase(0.02983588609748235818064083)
-		self.sympBase(0.17786179923739805133592238)
-		self.sympBase(0.09826906939341637652532377)
-		self.sympBase(0.46179986210411860873242126)
-		self.sympBase(-0.33377845599881851314531820)
-		self.sympBase(0.07095684836524793621031152)
-		self.sympBase(0.23666960070126868771909819)
-		self.sympBase(-0.49725977950660985445028388)
-		self.sympBase(-0.30399616617237257346546356)
-		self.sympBase(0.05246957188100069574521612)
-		self.sympBase(0.44373380805019087955111365)
-		self.sympBase(0.05246957188100069574521612)
-		self.sympBase(-0.30399616617237257346546356)
-		self.sympBase(-0.49725977950660985445028388)
-		self.sympBase(0.23666960070126868771909819)
-		self.sympBase(0.07095684836524793621031152)
-		self.sympBase(-0.33377845599881851314531820)
-		self.sympBase(0.46179986210411860873242126)
-		self.sympBase(0.09826906939341637652532377)
-		self.sympBase(0.17786179923739805133592238)
-		self.sympBase(0.02983588609748235818064083)
-		self.sympBase(0.14447909410225247647345695)
-		self.sympBase(-0.52556314194263510431065549)
-		self.sympBase(-0.31116802097815835426086544)
-		self.sympBase(0.35123257547493978187517736)
-		self.sympBase(0.53591815953030120213784983)
-		self.sympBase(0.09040619368607278492161150)
-
 	def solve (self):
 		tmp = len(self.coefficients) - 1
 		for i in range(0, tmp):
@@ -231,7 +162,6 @@ def main ():  # Need to be inside a function to return . . .
 		print s.bodiesJson()  # Log particle data
 		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (n * s.ts, hNow, h0, hMin, hMax, dbValue)  # Log progress
 		if (dbValue > s.eMax):
-#			print >> stderr, "Hamiltonian error is %.1fdBh0 (limit: %.1fdBh0), giving up!" % (dbValue, s.eMax)
 			return
 		n += 1
 
