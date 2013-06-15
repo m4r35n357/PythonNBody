@@ -28,18 +28,46 @@ class Symplectic(object):
 		self.ts = timeStep
 		self.eMax = errorLimit
 		self.n = runTime / fabs(timeStep)  # We can run backwards too!
+		self.coefficients = []
 		if (order == 2):  # Second order
-			self.iterate = self.SV2
+			self.coefficients.append(1.0)
 		elif (order == 4):  # Fourth order
-			self.cbrt2 = 2.0**(1.0 / 3.0)
-			self.y = 1.0 / (2.0 - self.cbrt2)
-			self.iterate = self.SV4
+			cbrt2 = 2.0 ** (1.0 / 3.0)
+			y = 1.0 / (2.0 - cbrt2)
+			self.coefficients.append(y)
+			self.coefficients.append(- y * cbrt2)
 		elif (order == 6):  # Sixth order
-			self.iterate = self.SV6
+			self.coefficients.append(0.78451361047755726381949763)
+			self.coefficients.append(0.23557321335935813368479318)
+			self.coefficients.append(-1.17767998417887100694641568)
+			self.coefficients.append(1.31518632068391121888424973)
 		elif (order == 8):  # Eighth order
-			self.iterate = self.SV8
+			self.coefficients.append(0.74167036435061295344822780)
+			self.coefficients.append(-0.40910082580003159399730010)
+			self.coefficients.append(0.19075471029623837995387626)
+			self.coefficients.append(-0.57386247111608226665638773)
+			self.coefficients.append(0.29906418130365592384446354)
+			self.coefficients.append(0.33462491824529818378495798)
+			self.coefficients.append(0.31529309239676659663205666)
+			self.coefficients.append(-0.79688793935291635401978884)
 		elif (order == 10):  # Tenth order
-			self.iterate = self.SV10
+			self.coefficients.append(0.09040619368607278492161150)
+			self.coefficients.append(0.53591815953030120213784983)
+			self.coefficients.append(0.35123257547493978187517736)
+			self.coefficients.append(-0.31116802097815835426086544)
+			self.coefficients.append(-0.52556314194263510431065549)
+			self.coefficients.append(0.14447909410225247647345695)
+			self.coefficients.append(0.02983588609748235818064083)
+			self.coefficients.append(0.17786179923739805133592238)
+			self.coefficients.append(0.09826906939341637652532377)
+			self.coefficients.append(0.46179986210411860873242126)
+			self.coefficients.append(-0.33377845599881851314531820)
+			self.coefficients.append(0.07095684836524793621031152)
+			self.coefficients.append(0.23666960070126868771909819)
+			self.coefficients.append(-0.49725977950660985445028388)
+			self.coefficients.append(-0.30399616617237257346546356)
+			self.coefficients.append(0.05246957188100069574521612)
+			self.coefficients.append(0.44373380805019087955111365)
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6, 8 or 10 <<<')
 
@@ -156,6 +184,13 @@ class Symplectic(object):
 		self.sympBase(0.53591815953030120213784983)
 		self.sympBase(0.09040619368607278492161150)
 
+	def solve (self):
+		tmp = len(self.coefficients) - 1
+		for i in range(0, tmp):
+			self.sympBase(self.coefficients[i])
+		for i in range(tmp, -1, -1):
+			self.sympBase(self.coefficients[i])
+
 	def bodiesJson (self):
 		data = []
 		for i in self.pRange:
@@ -184,7 +219,7 @@ def main ():  # Need to be inside a function to return . . .
 	print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (0.0, h0, h0, h0, h0, -999.9)  # Log initial progress
 	n = 1
 	while (n <= s.n):
-		s.iterate()  # Perform one full integration step
+		s.solve()  # Perform one full integration step
 		hNow = s.h()
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments

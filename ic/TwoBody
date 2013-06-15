@@ -19,5 +19,5 @@
   "g" : 0.05,
   "integratorOrder" : 10,
   "simulationTime" : 1000.0,
-  "timeStep" : 0.5
+  "timeStep" : 0.8
 }
