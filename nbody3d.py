@@ -22,8 +22,7 @@ class Symplectic(object):
 
 	def __init__(self, g, runTime, timeStep, errorLimit, bodies, order):
 		self.bodies = bodies
-		self.np = len(bodies)
-		self.pRange = range(self.np)
+		self.pRange = range(len(bodies))
 		self.g = g
 		self.ts = timeStep
 		self.eMax = errorLimit
@@ -72,13 +71,13 @@ class Symplectic(object):
 			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6, 8 or 10 <<<')
 
 	def dist (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
-		return sqrt((xB - xA)**2 + (yB - yA)**2 + (zB - zA)**2)
+		return sqrt((xB - xA) ** 2 + (yB - yA) ** 2 + (zB - zA) ** 2)
 
 	def h (self):  # Conserved energy
 		energy = 0.0
 		for i in self.pRange:
 			a = self.bodies[i]
-			energy += 0.5 * (a.pX**2 + a.pY**2 + a.pZ**2) / a.mass
+			energy += 0.5 * (a.pX ** 2 + a.pY ** 2 + a.pZ ** 2) / a.mass
 			for j in self.pRange:
 				if (i > j):
 					b = self.bodies[j]
@@ -110,10 +109,11 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def sympBase (self, c):  # Build higher order integrators by composition
-		self.updateQ(c * 0.5)
-		self.updateP(c)
-		self.updateQ(c * 0.5)
+	def sympBase (self, y):  # Build higher order integrators by composition
+		halfY = 0.5 * y
+		self.updateQ(halfY)
+		self.updateP(y)
+		self.updateQ(halfY)
 
 	def solve (self):
 		tmp = len(self.coefficients) - 1
@@ -122,18 +122,11 @@ class Symplectic(object):
 		for i in range(tmp, -1, -1):
 			self.sympBase(self.coefficients[i])
 
-#	def bodiesJson (self):
-#		data = []
-#		for i in self.pRange:
-#			data.append(str(self.bodies[i]))
-#		return "[" + ','.join(data) + "]"
-
 	def print_out (self, time, hNow, h0, hMin, hMax, dbValue):
 		data = []
 		for i in self.pRange:
 			data.append(str(self.bodies[i]))
 		print "[" + ','.join(data) + "]"
-#		print self.bodiesJson()  # Log particle data
 		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (time, hNow, h0, hMin, hMax, dbValue)  # Log progress
 
 def icJson (fileName):
