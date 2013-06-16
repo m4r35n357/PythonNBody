@@ -26,6 +26,6 @@
   "errorLimit" : -60.0,
   "g" : 1.0,
   "integratorOrder" : 10,
-  "simulationTime" : 100.0,
-  "timeStep" : 0.01
+  "simulationTime" : 1000.0,
+  "timeStep" : 0.05
 }

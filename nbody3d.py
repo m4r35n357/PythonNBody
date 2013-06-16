@@ -98,7 +98,7 @@ class Symplectic(object):
 			for j in self.pRange:
 				if (i > j):
 					b = self.bodies[j]
-					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)**3
+					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ) ** 3
 					dPx = tmp * (b.qX - a.qX)
 					dPy = tmp * (b.qY - a.qY)
 					dPz = tmp * (b.qZ - a.qZ)
@@ -109,18 +109,17 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def sympBase (self, y):  # Build higher order integrators by composition
-		halfY = 0.5 * y
-		self.updateQ(halfY)
-		self.updateP(y)
-		self.updateQ(halfY)
-
-	def solve (self):
+	def solve (self):  # Generalized Symplectic Integrator
+		def sympBase (self, y):  # Compose higher order integrators from this symmetrical second-order symplectic base
+			halfY = 0.5 * y
+			self.updateQ(halfY)
+			self.updateP(y)
+			self.updateQ(halfY)
 		tmp = len(self.coefficients) - 1
-		for i in range(0, tmp):
-			self.sympBase(self.coefficients[i])
+		for i in range(0, tmp):  # Composition happens in these loops
+			sympBase(self, self.coefficients[i])
 		for i in range(tmp, -1, -1):
-			self.sympBase(self.coefficients[i])
+			sympBase(self, self.coefficients[i])
 
 	def print_out (self, time, hNow, h0, hMin, hMax, dbValue):
 		data = []
