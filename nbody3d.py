@@ -1,6 +1,6 @@
 #!/opt/pypy-2.0.2-src/pypy/goal/pypy-c
 
-from sys import argv, stderr
+from sys import stdin, stdout, stderr
 from math import fabs, log10, sqrt
 from json import loads
 
@@ -125,11 +125,11 @@ class Symplectic(object):
 		data = []
 		for i in self.pRange:
 			data.append(str(self.bodies[i]))
-		print "[" + ','.join(data) + "]"
+		print >> stdout, "[" + ','.join(data) + "]"  # Log data
 		print >> stderr, '{"t":%.2f, "H":%.9e, "H0":%.9e, "H-":%.9e, "H+":%.9e, "ER":%.1f}' % (time, hNow, h0, hMin, hMax, dbValue)  # Log progress
 
-def icJson (fileName):
-	ic = loads(open(fileName, 'r').read())
+def icJson ():
+	ic = loads(stdin.read())
 	bodies = []
 	for a in ic['bodies']:
 		if 'pX' in a and 'pY' in a and 'pZ' in a:  # momenta specified
@@ -142,11 +142,9 @@ def icJson (fileName):
 	return Symplectic(ic['g'], ic['simulationTime'], ic['timeStep'], ic['errorLimit'], bodies, ic['integratorOrder'])
 
 def main ():  # Need to be inside a function to return . . .
-	if len(argv) < 2:
-		raise Exception('>>> ERROR! Please supply a scenario file name <<<')
-	s = icJson(argv[1])  # Create a symplectic integrator object from JSON input
+	s = icJson()  # Create a symplectic integrator object from JSON input
 	h0 = hMax = hMin = s.h()  # Set up error reporting
-	s.print_out(0.0, h0, h0, h0, h0, -999.9)
+	s.print_out(0.0, h0, h0, h0, h0, -180.0)
 	n = 1
 	while (n <= s.n):
 		s.solve()  # Perform one full integration step
