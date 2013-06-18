@@ -110,11 +110,11 @@ class Symplectic(object):
 					b.pZ += dPz
 
 	def solve (self):  # Generalized Symplectic Integrator
-		def sympBase (self, y):  # Compose higher order integrators from this symmetrical second-order symplectic base
+		def sympBase (s, y):  # Compose higher orders from this symmetrical second-order symplectic base
 			halfY = 0.5 * y
-			self.updateQ(halfY)
-			self.updateP(y)
-			self.updateQ(halfY)
+			s.updateQ(halfY)
+			s.updateP(y)
+			s.updateQ(halfY)
 		tmp = len(self.coefficients) - 1
 		for i in range(0, tmp):  # Composition happens in these loops
 			sympBase(self, self.coefficients[i])
