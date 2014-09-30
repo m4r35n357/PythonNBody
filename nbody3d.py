@@ -28,19 +28,19 @@ class Symplectic(object):
 		self.eMax = errorLimit
 		self.n = runTime / fabs(timeStep)  # We can run backwards too!
 		self.coefficients = []
-		if (order == 2):  # Second order
+		if order == 2:  # Second order
 			self.coefficients.append(1.0)
-		elif (order == 4):  # Fourth order
+		elif order == 4:  # Fourth order
 			cbrt2 = 2.0 ** (1.0 / 3.0)
 			y = 1.0 / (2.0 - cbrt2)
 			self.coefficients.append(y)
 			self.coefficients.append(- y * cbrt2)
-		elif (order == 6):  # Sixth order
+		elif order == 6:  # Sixth order
 			self.coefficients.append(0.78451361047755726381949763)
 			self.coefficients.append(0.23557321335935813368479318)
 			self.coefficients.append(-1.17767998417887100694641568)
 			self.coefficients.append(1.31518632068391121888424973)
-		elif (order == 8):  # Eighth order
+		elif order == 8:  # Eighth order
 			self.coefficients.append(0.74167036435061295344822780)
 			self.coefficients.append(-0.40910082580003159399730010)
 			self.coefficients.append(0.19075471029623837995387626)
@@ -49,7 +49,7 @@ class Symplectic(object):
 			self.coefficients.append(0.33462491824529818378495798)
 			self.coefficients.append(0.31529309239676659663205666)
 			self.coefficients.append(-0.79688793935291635401978884)
-		elif (order == 10):  # Tenth order
+		elif order == 10:  # Tenth order
 			self.coefficients.append(0.09040619368607278492161150)
 			self.coefficients.append(0.53591815953030120213784983)
 			self.coefficients.append(0.35123257547493978187517736)
@@ -70,7 +70,8 @@ class Symplectic(object):
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6, 8 or 10 <<<')
 
-	def dist (self, xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
+	@staticmethod
+	def dist (xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
 		return sqrt((xB - xA) ** 2 + (yB - yA) ** 2 + (zB - zA) ** 2)
 
 	def h (self):  # Conserved energy
@@ -79,7 +80,7 @@ class Symplectic(object):
 			a = self.bodies[i]
 			energy += 0.5 * (a.pX ** 2 + a.pY ** 2 + a.pZ ** 2) / a.mass
 			for j in self.pRange:
-				if (i > j):
+				if i > j:
 					b = self.bodies[j]
 					energy -= self.g * a.mass * b.mass / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)
 		return energy
@@ -96,7 +97,7 @@ class Symplectic(object):
 		for i in self.pRange:
 			a = self.bodies[i]
 			for j in self.pRange:
-				if (i > j):
+				if i > j:
 					b = self.bodies[j]
 					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ) ** 3
 					dPx = tmp * (b.qX - a.qX)
@@ -146,22 +147,23 @@ def main ():  # Need to be inside a function to return . . .
 	h0 = hMax = hMin = s.h()  # Set up error reporting
 	s.print_out(0.0, h0, h0, h0, h0, -180.0)
 	n = 1
-	while (n <= s.n):
+	while n <= s.n:
 		s.solve()  # Perform one full integration step
 		hNow = s.h()
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments
-		if (hNow < hMin):  # Low tide
+		if hNow < hMin:  # Low tide
 			hMin = hNow
-		elif (hNow > hMax):  # High tide
+		elif hNow > hMax:  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0))
 		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
-		if (dbValue > s.eMax):
+		if dbValue > s.eMax:
 			return
 		n += 1
 
 if __name__ == "__main__":
 	main()
 else:
-	print >> sys.stderr, __name__ + " module loaded"
+	print >> stderr, __name__ + " module loaded"
+
