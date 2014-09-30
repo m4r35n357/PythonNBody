@@ -1,6 +1,7 @@
 # comment
 *.pyc
 .spyderproject
+.idea
 *.*~
 data
 progress
