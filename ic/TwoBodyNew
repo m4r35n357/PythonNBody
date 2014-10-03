@@ -1,0 +1,23 @@
+{ "bodies" : [ { "mass" : 1.0,
+        "pX" : 1.0,
+        "pY" : 0.0,
+        "pZ" : 0.0,
+        "qX" : 0.0,
+        "qY" : 0.5,
+        "qZ" : 0.0
+      },
+      { "mass" : 1.0,
+        "pX" : -1.0,
+        "pY" : 0.0,
+        "pZ" : 0.0,
+        "qX" : 0.0,
+        "qY" : -0.5,
+        "qZ" : 0.0
+      }
+    ],
+  "errorLimit" : -30.0,
+  "g" : 2.0,
+  "integratorOrder" : 10,
+  "simulationTime" : 1000.0,
+  "timeStep" : 0.1
+}

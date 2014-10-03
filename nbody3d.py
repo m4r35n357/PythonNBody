@@ -109,17 +109,18 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
+	def sympBase (self, y):  # Compose higher orders from this symmetrical second-order symplectic base
+		halfY = 0.5 * y
+		self.updateQ(halfY)
+		self.updateP(y)
+		self.updateQ(halfY)
+			
 	def solve (self):  # Generalized Symplectic Integrator
-		def sympBase (s, y):  # Compose higher orders from this symmetrical second-order symplectic base
-			halfY = 0.5 * y
-			s.updateQ(halfY)
-			s.updateP(y)
-			s.updateQ(halfY)
 		tmp = len(self.coefficients) - 1
 		for i in range(0, tmp):  # Composition happens in these loops
-			sympBase(self, self.coefficients[i])
+			self.sympBase(self.coefficients[i])
 		for i in range(tmp, -1, -1):
-			sympBase(self, self.coefficients[i])
+			self.sympBase(self.coefficients[i])
 
 	def print_out (self, time, hNow, h0, hMin, hMax, dbValue):
 		data = []
@@ -149,13 +150,14 @@ def main ():  # Need to be inside a function to return . . .
 	while n <= s.n:
 		s.solve()  # Perform one full integration step
 		hNow = s.h()
+		
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments
 		if hNow < hMin:  # Low tide
 			hMin = hNow
 		elif hNow > hMax:  # High tide
 			hMax = hNow
-		dbValue = 10.0 * log10(fabs(dH / h0))
+		dbValue = 10.0 * log10(dH)
 		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
 		if dbValue > s.eMax:
 			return
