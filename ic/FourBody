@@ -33,7 +33,7 @@
     ],
   "errorLimit" : -60.0,
   "g" : 3.5,
-  "integratorOrder" : 10,
+  "integratorOrder" : 4,
   "simulationTime" : 1000.0,
-  "timeStep" : 0.1
+  "timeStep" : 0.01
 }
