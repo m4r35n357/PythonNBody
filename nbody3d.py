@@ -71,13 +71,13 @@ class Symplectic(object):
 
 	@staticmethod
 	def dist (xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
-		return sqrt((xB - xA) ** 2 + (yB - yA) ** 2 + (zB - zA) ** 2)
+		return sqrt((xB - xA)**2 + (yB - yA)**2 + (zB - zA)**2)
 
 	def h (self):  # Conserved energy
 		energy = 0.0
 		for i in self.pRange:
 			a = self.bodies[i]
-			energy += 0.5 * (a.pX ** 2 + a.pY ** 2 + a.pZ ** 2) / a.mass
+			energy += 0.5 * (a.pX**2 + a.pY**2 + a.pZ**2) / a.mass
 			for j in self.pRange:
 				if i > j:
 					b = self.bodies[j]
@@ -98,7 +98,7 @@ class Symplectic(object):
 			for j in self.pRange:
 				if i > j:
 					b = self.bodies[j]
-					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ) ** 3
+					tmp = - c * self.g * a.mass * b.mass * self.ts / self.dist(a.qX, a.qY, a.qZ, b.qX, b.qY, b.qZ)**3
 					dPx = tmp * (b.qX - a.qX)
 					dPy = tmp * (b.qY - a.qY)
 					dPz = tmp * (b.qZ - a.qZ)
@@ -117,7 +117,7 @@ class Symplectic(object):
 			
 	def solve (self):  # Generalized Symplectic Integrator
 		tmp = len(self.coefficients) - 1
-		for i in range(0, tmp):  # Composition happens in these loops
+		for i in range(tmp):  # Composition happens in these loops
 			self.sympBase(self.coefficients[i])
 		for i in range(tmp, -1, -1):
 			self.sympBase(self.coefficients[i])
@@ -149,15 +149,14 @@ def main ():  # Need to be inside a function to return . . .
 	n = 1
 	while n <= s.n:
 		s.solve()  # Perform one full integration step
-		hNow = s.h()
-		
+		hNow = s.h()		
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
 		dH = tmp if tmp > 0.0 else 1.0e-18  # Protect logarithm against small arguments
 		if hNow < hMin:  # Low tide
 			hMin = hNow
 		elif hNow > hMax:  # High tide
 			hMax = hNow
-		dbValue = 10.0 * log10(fabs(dH / h0))
+		dbValue = 10.0 * log10(fabs(dH / h0) + 1.0e-18)
 		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
 		if dbValue > s.eMax:
 			return
