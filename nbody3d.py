@@ -20,27 +20,26 @@ class Particle(object):
 		return "{\"qX\":%.6e,\"qY\":%.6e,\"qZ\":%.6e,\"pX\":%.6e,\"pY\":%.6e,\"pZ\":%.6e,\"mass\":%.3e}" % (self.qX, self.qY, self.qZ, self.pX, self.pY, self.pZ, self.mass)
 
 class Symplectic(object):
-
 	def __init__(self, g, runTime, timeStep, errorLimit, bodies, order):
 		self.bodies = bodies
 		self.pRange = range(len(bodies))
 		self.g = g
 		self.ts = timeStep
 		self.eMax = errorLimit
-		self.n = runTime / fabs(timeStep)  # We can run backwards too!
+		self.T = runTime
 		if order == 2:  # Second order
-			self.coefficients = array('d', [1.0])
+			self.coeff = array('d', [1.0])
 		elif order == 4:  # Fourth order
 			cbrt2 = 2.0 ** (1.0 / 3.0)
 			y = 1.0 / (2.0 - cbrt2)
-			self.coefficients = array('d', [y,- y * cbrt2])
+			self.coeff = array('d', [y,- y * cbrt2])
 		elif order == 6:  # Sixth order
-			self.coefficients = array('d', [0.78451361047755726381949763,
+			self.coeff = array('d', [0.78451361047755726381949763,
 											0.23557321335935813368479318,
 											-1.17767998417887100694641568,
 											1.31518632068391121888424973])
 		elif order == 8:  # Eighth order
-			self.coefficients = array('d', [0.74167036435061295344822780,
+			self.coeff = array('d', [0.74167036435061295344822780,
 											-0.40910082580003159399730010,
 											0.19075471029623837995387626,
 											-0.57386247111608226665638773,
@@ -49,7 +48,7 @@ class Symplectic(object):
 											0.31529309239676659663205666,
 											-0.79688793935291635401978884])
 		elif order == 10:  # Tenth order
-			self.coefficients = array('d', [0.09040619368607278492161150,
+			self.coeff = array('d', [0.09040619368607278492161150,
 											0.53591815953030120213784983,
 											0.35123257547493978187517736,
 											-0.31116802097815835426086544,
@@ -68,6 +67,8 @@ class Symplectic(object):
 											0.44373380805019087955111365])
 		else:  # Wrong value for integrator order
 			raise Exception('>>> ERROR! Integrator order must be 2, 4, 6, 8 or 10 <<<')
+        	self.coefficientsUp = range(len(self.coeff) - 1)
+        	self.coefficientsDown = range(len(self.coeff) - 1, -1, -1)
 
 	@staticmethod
 	def dist (xA, yA, zA, xB, yB, zB):  # Euclidean distance between point A and point B
@@ -109,18 +110,15 @@ class Symplectic(object):
 					b.pY += dPy
 					b.pZ += dPz
 
-	def sympBase (self, y):  # Compose higher orders from this symmetrical second-order symplectic base
-		halfY = 0.5 * y
-		self.updateQ(halfY)
-		self.updateP(y)
-		self.updateQ(halfY)
-			
 	def solve (self):  # Generalized Symplectic Integrator
-		tmp = len(self.coefficients) - 1
-		for i in range(tmp):  # Composition happens in these loops
-			self.sympBase(self.coefficients[i])
-		for i in range(tmp, -1, -1):
-			self.sympBase(self.coefficients[i])
+		def sympBase (y):  # Compose higher orders from this symmetrical second-order symplectic base
+			self.updateQ(0.5 * y)
+			self.updateP(y)
+			self.updateQ(0.5 * y)		
+		for i in self.coefficientsUp:  # Composition happens in these loops
+			sympBase(self.coeff[i])
+		for i in self.coefficientsDown:
+			sympBase(self.coeff[i])
 
 	def print_out (self, time, hNow, h0, hMin, hMax, dbValue):
 		data = []
@@ -146,8 +144,8 @@ def main ():  # Need to be inside a function to return . . .
 	s = icJson()  # Create a symplectic integrator object from JSON input
 	h0 = hMax = hMin = s.h()  # Set up error reporting
 	s.print_out(0.0, h0, h0, h0, h0, -180.0)
-	n = 1
-	while n <= s.n:
+        n = 0.0
+	while True:
 		s.solve()  # Perform one full integration step
 		hNow = s.h()		
 		tmp = fabs(hNow - h0)  # Protect logarithm against negative arguments
@@ -158,9 +156,9 @@ def main ():  # Need to be inside a function to return . . .
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0) + 1.0e-18)
 		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
-		if dbValue > s.eMax:
+		if fabs(n) > s.T or dbValue > s.eMax:
 			return
-		n += 1
+		n += s.ts
 
 if __name__ == "__main__":
 	main()
