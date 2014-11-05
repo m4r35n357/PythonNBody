@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from sys import argv
+from math import log10, sqrt
 from visual import scene, sphere, curve, rate
 from json import loads
 
@@ -10,7 +11,8 @@ def main():
 	dataFile = open(argv[1], 'r')
 	# scene basics
 	scene.center = (0,0,0)
-	scene.width = scene.height = 1000
+	scene.width = 1500
+        scene.height = 1000
 #	scene.range = (10.0, 10.0, 10.0)
 	scene.range = (1.0e9, 1.0e9, 1.0e9)
 	# get data dimensions
@@ -18,14 +20,16 @@ def main():
 	bodies = loads(line)
 	pRange = range(len(bodies))
 	#  set up the balls
-	colours = [ (1.0, 1.0, 1.0), (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (0.7, 0.7, 0.7), (0.5, 0.5, 0.0), (0.5, 0.0, 0.5), (0.0, 0.5, 0.5), (0.3, 0.3, 0.3) ]
+	colours = [ (1.0, 1.0, 0.0), (1.0, 1.0, 1.0), (0.0, 1.0, 0.0), (0.0, 0.5, 0.5), (1.0, 0.0, 0.0), (0.5, 1.0, 0.0), (1.0, 0.0, 1.0), (1.0, 0.5, 0.0), (0.0, 1.0, 1.0) ]
 	spheres = []
 	for j in pRange:
 		p = bodies[j]
+                r = 1000000.0 * log10(p['mass']**(1.0 / 3.0))
 #		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
-		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 10000000.0, color = colours[j])
+		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = r, color = colours[j])
+#		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 10000000.0, color = colours[j])
 #		ball.trail = curve(color = ball.color)
-		ball.trail = curve(color = ball.color, radius = 2000000.0)
+		ball.trail = curve(color = ball.color, radius = 0.1 * r)
 		spheres.append(ball)
 	while line:
 		rate(60)

@@ -155,7 +155,7 @@ def main ():  # Need to be inside a function to return . . .
 		elif hNow > hMax:  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0) + 1.0e-18)
-		s.print_out(n * s.ts, hNow, h0, hMin, hMax, dbValue)
+		s.print_out(n, hNow, h0, hMin, hMax, dbValue)
 		if fabs(n) > s.T or dbValue > s.eMax:
 			return
 		n += s.ts
