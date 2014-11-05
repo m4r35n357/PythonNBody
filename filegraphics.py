@@ -11,7 +11,7 @@ def main():
 	dataFile = open(argv[1], 'r')
 	# scene basics
 	scene.center = (0,0,0)
-	scene.width = 1500
+	scene.width = 1800
         scene.height = 1000
 #	scene.range = (10.0, 10.0, 10.0)
 	scene.range = (1.0e9, 1.0e9, 1.0e9)
