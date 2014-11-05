@@ -28,8 +28,7 @@ def main():
 #		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
 		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = r, color = colours[j])
 #		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 10000000.0, color = colours[j])
-#		ball.trail = curve(color = ball.color)
-		ball.trail = curve(color = ball.color, radius = 0.1 * r)
+		ball.trail = curve(color = ball.color)
 		spheres.append(ball)
 	while line:
 		rate(60)

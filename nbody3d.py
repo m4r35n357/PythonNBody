@@ -144,7 +144,7 @@ def main ():  # Need to be inside a function to return . . .
 	s = icJson()  # Create a symplectic integrator object from JSON input
 	h0 = hMax = hMin = s.h()  # Set up error reporting
 	s.print_out(0.0, h0, h0, h0, h0, -180.0)
-        n = 0.0
+        t = 0.0
 	while True:
 		s.solve()  # Perform one full integration step
 		hNow = s.h()		
@@ -155,10 +155,10 @@ def main ():  # Need to be inside a function to return . . .
 		elif hNow > hMax:  # High tide
 			hMax = hNow
 		dbValue = 10.0 * log10(fabs(dH / h0) + 1.0e-18)
-		s.print_out(n, hNow, h0, hMin, hMax, dbValue)
-		if fabs(n) > s.T or dbValue > s.eMax:
+		s.print_out(t, hNow, h0, hMin, hMax, dbValue)
+		if fabs(t) > s.T or dbValue > s.eMax:
 			return
-		n += s.ts
+		t += s.ts
 
 if __name__ == "__main__":
 	main()
