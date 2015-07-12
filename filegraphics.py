@@ -2,7 +2,7 @@
 
 from sys import argv
 from math import log10, sqrt
-from visual import scene, sphere, curve, rate
+from visual import scene, sphere, points, rate
 from json import loads
 
 def main():
@@ -28,7 +28,7 @@ def main():
 #		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 0.1 * p['mass']**(1.0 / 3.0), color = colours[j])
 		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = r, color = colours[j])
 #		ball = sphere(pos = (p['qX'], p['qY'], p['qZ']), radius = 10000000.0, color = colours[j])
-		ball.trail = curve(color = ball.color)
+		ball.trail = points(color = ball.color, size = 1)
 		spheres.append(ball)
 	while line:
 		rate(60)
@@ -45,7 +45,7 @@ def main():
 			ball = spheres[j]
 			position = (p['qX'] - X / mT, p['qY'] - Y / mT, p['qZ'] - Z / mT)
 			ball.pos = position
-			ball.trail.append(pos = position)
+			ball.trail.append(pos = position, retain = 1000)
 		line = dataFile.readline()
 
 if __name__ == "__main__":
